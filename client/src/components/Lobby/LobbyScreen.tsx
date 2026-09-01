@@ -527,6 +527,7 @@ export const LobbyScreen: React.FC = () => {
                         'cosmic_space',
                         'anime_akiba',
                         'casino_royale',
+                        'pixel_arcade',
                       ] as BoardThemeId[]
                     ).map((tId) => {
                       const themeInfo = THEME_NAMES[tId];

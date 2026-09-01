@@ -19,7 +19,7 @@ function assert(condition: boolean, testName: string) {
 
 // 1. In-Game Chat vs Activity Log Isolation
 console.log('Test Group 1: Chat vs Activity Log Separation');
-const room = new GameRoom('TEST01', 'Host Jasmine');
+const room = new GameRoom('TEST01', 'p1_id', 'Host Jasmine');
 const p1Id = Object.keys(room.state.players)[0];
 const p1 = room.state.players[p1Id];
 

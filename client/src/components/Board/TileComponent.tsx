@@ -99,6 +99,8 @@ export const TileComponent: React.FC<TileComponentProps> = ({
       {owner && !isCorner && (
         <div
           className={`absolute z-20 flex items-center gap-1 px-1 py-0.5 rounded-md border shadow-sm backdrop-blur-xs transition-transform ${
+            themeId === 'pixel_arcade' ? 'font-pixel text-[7.5px] border-2' : 'rounded-md'
+          } ${
             orientation === 'bottom'
               ? 'bottom-1 right-1'
               : orientation === 'top'
@@ -118,7 +120,7 @@ export const TileComponent: React.FC<TileComponentProps> = ({
             className="w-1.5 h-1.5 rounded-full shrink-0"
             style={{ backgroundColor: owner.customization.color }}
           />
-          <span className="font-mono text-[8px] font-black uppercase tracking-wider truncate max-w-[32px] leading-none">
+          <span className={`${themeId === 'pixel_arcade' ? 'font-arcade text-[8px]' : 'font-mono text-[8px]'} font-black uppercase tracking-wider truncate max-w-[32px] leading-none`}>
             {owner.name.substring(0, 3)}
           </span>
         </div>
@@ -146,7 +148,9 @@ export const TileComponent: React.FC<TileComponentProps> = ({
           }`}
           style={{
             backgroundColor: tile.color,
-            backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%)',
+            backgroundImage: themeId === 'pixel_arcade'
+              ? 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.25) 100%)'
+              : 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%)',
           }}
         >
           {/* House / Hotel Indicators Embedded Cleanly in Color Band */}
@@ -157,12 +161,63 @@ export const TileComponent: React.FC<TileComponentProps> = ({
               }`}
             >
               {houseCount === 5 ? (
-                <span className="text-[8.5px] font-mono font-black text-amber-300 drop-shadow-sm">★H</span>
+                themeId === 'pixel_arcade' ? (
+                  <span className="text-[9px] font-pixel text-amber-300 font-black drop-shadow-sm leading-none">🏰</span>
+                ) : themeId === 'world_tour' ? (
+                  <span className="text-[9px] text-amber-300 font-black drop-shadow-md leading-none" title="Grand Luxury Hotel Tower">🏛️</span>
+                ) : themeId === 'cyber_neon' ? (
+                  <span className="text-[9px] text-cyan-300 font-black drop-shadow-md leading-none animate-pulse" title="Cyber Arcology / Hyper-Tower">🗼</span>
+                ) : themeId === 'mystic_fantasy' ? (
+                  <span className="text-[9.5px] text-amber-200 font-black drop-shadow-md leading-none animate-pulse" title="Grand Wizarding Palace of Eldoria">🛕</span>
+                ) : themeId === 'cosmic_space' ? (
+                  <span className="text-[9.5px] text-cyan-200 font-black drop-shadow-md leading-none animate-pulse" title="Interstellar Grand Station">🪐</span>
+                ) : themeId === 'anime_akiba' ? (
+                  <span className="text-[9.5px] text-pink-300 font-black drop-shadow-md leading-none animate-pulse" title="Akiba Grand Entertainment Tower">🗼</span>
+                ) : (
+                  <span className="text-[8.5px] font-mono font-black text-amber-300 drop-shadow-sm">★H</span>
+                )
+              ) : themeId === 'world_tour' ? (
+                <div className={`flex items-center gap-0.5 ${isVerticalLane ? 'flex-col' : ''}`}>
+                  {houseCount === 1 && <span className="text-[8px] leading-none" title="Townhouse / Storefront">🏡</span>}
+                  {houseCount === 2 && <span className="text-[8px] leading-none" title="City Apartment Building">🏢</span>}
+                  {houseCount === 3 && <span className="text-[8px] leading-none" title="Commercial Plaza Tower">🏬</span>}
+                  {houseCount === 4 && <span className="text-[8px] leading-none" title="Luxury Glass Skyscraper">🏙️</span>}
+                </div>
+              ) : themeId === 'cyber_neon' ? (
+                <div className={`flex items-center gap-0.5 ${isVerticalLane ? 'flex-col' : ''}`}>
+                  {houseCount === 1 && <span className="text-[8px] leading-none" title="Neon Capsule Residence">📡</span>}
+                  {houseCount === 2 && <span className="text-[8px] leading-none" title="Cyber Apartment Block">🏢</span>}
+                  {houseCount === 3 && <span className="text-[8px] leading-none" title="Corporate Commercial Tower">🏬</span>}
+                  {houseCount === 4 && <span className="text-[8px] leading-none" title="Mega-Corp Skyscraper">🏙️</span>}
+                </div>
+              ) : themeId === 'mystic_fantasy' ? (
+                <div className={`flex items-center gap-0.5 ${isVerticalLane ? 'flex-col' : ''}`}>
+                  {houseCount === 1 && <span className="text-[8px] leading-none" title="Enchanted Cottage (1 House)">🏡</span>}
+                  {houseCount === 2 && <span className="text-[8px] leading-none" title="Wizard's Lodge (2 Houses)">🏠</span>}
+                  {houseCount === 3 && <span className="text-[8px] leading-none" title="Arcane Manor (3 Houses)">🏰</span>}
+                  {houseCount === 4 && <span className="text-[8px] leading-none" title="Wizard Citadel (4 Houses)">🏯</span>}
+                </div>
+              ) : themeId === 'cosmic_space' ? (
+                <div className={`flex items-center gap-0.5 ${isVerticalLane ? 'flex-col' : ''}`}>
+                  {houseCount === 1 && <span className="text-[8px] leading-none" title="Lunar Habitat Pod (1 House)">🛸</span>}
+                  {houseCount === 2 && <span className="text-[8px] leading-none" title="Orbital Research Habitat (2 Houses)">🛰️</span>}
+                  {houseCount === 3 && <span className="text-[8px] leading-none" title="Planetary Research Complex (3 Houses)">🏭</span>}
+                  {houseCount === 4 && <span className="text-[8px] leading-none" title="Deep-Space Colony (4 Houses)">🏙️</span>}
+                </div>
+              ) : themeId === 'anime_akiba' ? (
+                <div className={`flex items-center gap-0.5 ${isVerticalLane ? 'flex-col' : ''}`}>
+                  {houseCount === 1 && <span className="text-[8px] leading-none" title="Small Anime Shop / Otaku Boutique (1 House)">🏪</span>}
+                  {houseCount === 2 && <span className="text-[8px] leading-none" title="Manga & Hobby Store (2 Houses)">🏬</span>}
+                  {houseCount === 3 && <span className="text-[8px] leading-none" title="Multi-Floor Arcade / Entertainment Center (3 Houses)">🕹️</span>}
+                  {houseCount === 4 && <span className="text-[8px] leading-none" title="Large Anime & Electronics Complex (4 Houses)">🏮</span>}
+                </div>
               ) : (
                 Array.from({ length: houseCount }).map((_, i) => (
                   <div
                     key={i}
-                    className="w-2 h-2 rounded-sm bg-white border border-slate-900 shadow-sm"
+                    className={`w-2 h-2 rounded-sm border border-slate-950 shadow-sm ${
+                      themeId === 'pixel_arcade' ? 'bg-emerald-300' : 'bg-white'
+                    }`}
                   />
                 ))
               )}
@@ -188,7 +243,11 @@ export const TileComponent: React.FC<TileComponentProps> = ({
         <div
           className={`font-bold leading-tight line-clamp-2 ${
             isCorner
-              ? 'text-[10px] sm:text-xs md:text-sm font-black text-amber-300 uppercase tracking-tight font-display'
+              ? themeId === 'pixel_arcade'
+                ? 'text-[8.5px] sm:text-[9.5px] md:text-[11px] font-pixel text-amber-300 uppercase tracking-tight'
+                : 'text-[10px] sm:text-xs md:text-sm font-black text-amber-300 uppercase tracking-tight font-display'
+              : themeId === 'pixel_arcade'
+              ? 'text-[9px] sm:text-[10px] md:text-[11px] text-slate-100 font-arcade'
               : 'text-[9.5px] sm:text-[11px] md:text-xs text-slate-100 font-sans'
           }`}
         >
@@ -197,18 +256,24 @@ export const TileComponent: React.FC<TileComponentProps> = ({
 
         {/* Price / Subtext - Secondary Hierarchy */}
         {tile.price ? (
-          <div className="mt-0.5 font-mono text-[9px] sm:text-[10.5px] md:text-[11.5px] text-emerald-400 font-bold tabular-nums">
+          <div className={`mt-0.5 text-[9px] sm:text-[10.5px] md:text-[11.5px] text-emerald-400 font-bold tabular-nums ${
+            themeId === 'pixel_arcade' ? 'font-arcade' : 'font-mono'
+          }`}>
             ${tile.price}
           </div>
         ) : tile.subText ? (
-          <div className="mt-0.5 text-[8.5px] sm:text-[9.5px] text-slate-400 font-medium leading-none">
+          <div className={`mt-0.5 text-[8.5px] sm:text-[9.5px] text-slate-400 font-medium leading-none ${
+            themeId === 'pixel_arcade' ? 'font-arcade' : ''
+          }`}>
             {tile.subText}
           </div>
         ) : null}
 
         {/* Mortgaged Stamp Overlay */}
         {isMortgaged && (
-          <div className="absolute inset-0 bg-red-950/80 backdrop-blur-xs flex items-center justify-center rotate-12 border border-red-500/60 text-red-300 font-mono font-black text-[8.5px] sm:text-[10px] uppercase tracking-wider z-20 shadow-md">
+          <div className={`absolute inset-0 bg-red-950/85 backdrop-blur-xs flex items-center justify-center rotate-12 border border-red-500/60 text-red-300 font-black text-[8.5px] sm:text-[10px] uppercase tracking-wider z-20 shadow-md ${
+            themeId === 'pixel_arcade' ? 'font-pixel' : 'font-mono'
+          }`}>
             MORTGAGED
           </div>
         )}

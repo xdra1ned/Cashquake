@@ -20,6 +20,7 @@ import { AvatarSilhouette } from '../Avatars/AvatarSilhouette';
 import { PropertyInspectModal } from '../Modals/PropertyInspectModal';
 import { BoardActivityToast } from './BoardActivityToast';
 import { DiceRoller3D } from './DiceRoller3D';
+import { ThemeInteractiveLayer } from './ThemeInteractions/ThemeInteractiveLayer';
 import { TileComponent } from './TileComponent';
 
 interface Board2DProps {
@@ -227,7 +228,7 @@ export const Board2D: React.FC<Board2DProps> = ({
             className="w-full h-full rounded-2xl border-2 p-2 sm:p-3.5 flex flex-col items-center justify-between relative shadow-inner overflow-hidden"
           >
             {/* Themed Center Vector Motif - Fixed Geometric Background Watermark */}
-            <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-6 pointer-events-none select-none z-0">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
               <ThemedCenterMotif
                 themeId={gameState.themeId}
                 accentColor={theme.colors.uiAccent}
@@ -316,6 +317,9 @@ export const Board2D: React.FC<Board2DProps> = ({
 
             {/* Dedicated Match Activity Toast Area (Upper Center Board Area - Zero Turn Box Collision) */}
             <BoardActivityToast />
+
+            {/* Themed Interactive Worldbuilding Layer */}
+            <ThemeInteractiveLayer themeId={gameState.themeId} />
 
             {/* Center: Turn Status, Tactile 3D Dice Roller & Integrated Turn Actions */}
             <div className="flex flex-col items-center justify-center my-auto z-10 gap-2">

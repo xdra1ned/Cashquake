@@ -7,12 +7,15 @@ import type { BoardThemeId, ColorGroup } from '@shared/types';
  * and the programmatic pattern will be replaced.
  */
 export type CenterPatternId =
-  | 'compass'         // World Metropolis — geometric compass rose
-  | 'circuit'         // Cyber Neon — circuit board trace lines
-  | 'mandala'         // Mystic Fantasy — geometric rune/mandala
-  | 'constellation'   // Cosmic Space — star field with constellation lines
-  | 'blossom'         // Anime Akiba — petal geometry
-  | 'roulette';       // Casino Royale — illuminated roulette wheel & card filigree
+  | 'compass'             // Legacy compass rose
+  | 'metropolis_skyline'  // World Metropolis — Central City Plaza, Cashquake Tower & Skyline
+  | 'circuit'             // Cyber Neon — circuit board trace lines
+  | 'mandala'             // Mystic Fantasy — geometric rune/mandala
+  | 'constellation'       // Cosmic Space — star field with constellation lines
+  | 'blossom'             // Anime Akiba — petal geometry
+  | 'akiba_district'      // Anime Akiba — dense anime streetscape, elevated Yamanote rail & neon storefronts
+  | 'roulette'            // Casino Royale — illuminated roulette wheel & card filigree
+  | 'arcade_screen';      // Pixel Quest — retro arcade screen, pixel starfield & coin banner
 
 export interface ThemeColorPalette {
   /** Board outer background (behind tiles) */

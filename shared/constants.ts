@@ -253,76 +253,76 @@ export const THEME_NAMES: Record<BoardThemeId, { name: string; icon: string; des
   world_tour: {
     name: 'World Metropolis 🌍',
     icon: '🌍',
-    description: 'Travel the world from Cairo to Tokyo and New York!',
+    description: 'Build your real estate empire across major global financial capitals!',
     tiles: [
-      'START / GO', 'Cairo Oasis', 'World Chance', 'Giza Pyramids', 'Airport Toll', 'Trans-Siberian Rail',
-      'Rio Boardwalk', 'World Fortune', 'Copacabana', 'São Paulo Plaza', 'Detention Center',
-      'Sydney Harbor', 'Solar Grid', 'Bondi Beach', 'Melbourne Blvd', 'Eurostar Express',
-      'London Eye', 'World Chance', 'Piccadilly Circus', 'Mayfair Estate', 'Holiday Resort',
-      'Paris Louvre', 'World Fortune', 'Champs-Élysées', 'Eiffel Summit', 'Shinkansen Rail',
-      'Rome Colosseum', 'Venice Grand Canal', 'Water Works', 'Milan Fashion Ave', 'Arrest Order!',
-      'New York Broadway', 'Wall Street', 'World Fortune', 'Fifth Avenue', 'Hyperloop Transit',
-      'World Chance', 'Ginza Tokyo', 'Luxury Duty', 'Shibuya Crossing'
+      'CITY CENTER / GO', 'Cairo Oasis', 'City News', 'Giza Pyramids', 'Municipal Toll', 'Central Station Metro',
+      'Rio Boardwalk', 'City Investment', 'Copacabana', 'São Paulo Plaza', 'Municipal Detention',
+      'Sydney Harbor', 'Electricity Grid', 'Bondi Beach', 'Melbourne Blvd', 'Grand Terminal Express',
+      'London Eye', 'City News', 'Piccadilly Circus', 'Mayfair Estate', 'City Parking Plaza',
+      'Paris Louvre', 'City Investment', 'Champs-Élysées', 'Eiffel Summit', 'Riverside Metro Line',
+      'Rome Colosseum', 'Venice Grand Canal', 'Water Authority', 'Milan Fashion Ave', 'Police Precinct!',
+      'New York Broadway', 'Wall Street', 'City Investment', 'Fifth Avenue', 'International Transit Hub',
+      'City News', 'Ginza Tokyo', 'City Revenue Tax', 'Shibuya Crossing'
     ],
   },
   cyber_neon: {
     name: 'Cyber Neon 2099 ⚡',
     icon: '⚡',
-    description: 'High-tech neon dystopia with megacorps and digital contraband.',
+    description: 'High-tech neon dystopia with megacorps and digital infrastructure.',
     tiles: [
-      'BOOTSTRAP GO', 'Rust Alley', 'Glitch Code', 'Neon Slums', 'Data Tax', 'MagLev Sector 1',
-      'Hacker Den', 'Cyber Cache', 'Synth Club', 'Chromium Ave', 'Cryo Detention',
-      'Neural Node', 'Fusion Core', 'Proxy Port', 'Quantum Gateway', 'MagLev Sector 2',
-      'Augment Clinic', 'Glitch Code', 'Silicon District', 'AI Mainframe', 'Recharge Pod',
-      'Megacorp Plaza', 'Cyber Cache', 'Nexus Citadel', 'Apex Tower', 'MagLev Sector 3',
-      'Black Market', 'Dark Web Exchange', 'Power Substation', 'Cyber Vault', 'System Quarantine!',
-      'Orbital Uplink', 'Cyber Skyway', 'Cyber Cache', 'Satellite Array', 'MagLev Sector 4',
-      'Glitch Code', 'Zion Megatower', 'Corpo Surcharge', 'The Singularity'
+      'GRID GATEWAY / GO', 'Rust Alley', 'Probability Engine', 'Neon Slums', 'Bandwidth Tax', 'Nexus Sky-Maglev',
+      'Hacker Den', 'Quantum Vault', 'Synth Club', 'Chromium Ave', 'Cyber Detention',
+      'Neural Node', 'Fusion Core', 'Proxy Port', 'Quantum Gateway', 'Central Maglev Line',
+      'Augment Clinic', 'Probability Engine', 'Silicon District', 'AI Mainframe', 'Neon Recharge Lounge',
+      'Megacorp Plaza', 'Quantum Vault', 'Nexus Citadel', 'Apex Tower', 'Apex Express Rail',
+      'Black Market', 'Dark Web Exchange', 'Cooling Network', 'Cyber Vault', 'Security Lockdown!',
+      'Orbital Uplink', 'Cyber Skyway', 'Quantum Vault', 'Satellite Array', 'Hyperloop Orbital Hub',
+      'Probability Engine', 'Zion Megatower', 'Corpo Surcharge', 'Nexus Prime Arcology'
     ],
   },
   mystic_fantasy: {
     name: 'Mystic Fantasy Realm 🔮',
     icon: '🔮',
-    description: 'Enchanted forests, goblin mines, and dragon towers.',
+    description: 'Enchanted forests, ancient runes, mana springs, and grand palaces of Eldoria.',
     tiles: [
-      'DAWN PORTAL', 'Goblin Bog', 'Arcane Fate', 'Muddy Marsh', 'King\'s Tithe', 'Griffon Aerie',
-      'Elfwood Hollow', 'Rune Chest', 'Whispering Grove', 'Silverleaf Spires', 'Dungeon Cell',
-      'Dwarf Forge', 'Mana Springs', 'Ironstone Keep', 'Hammerfall Peak', 'Pegasus Haven',
-      'Mage Academy', 'Arcane Fate', 'Spellbook Library', 'Astral Observatory', 'Sacred Sanctuary',
-      'Mermaid Cove', 'Rune Chest', 'Kraken Trench', 'Atlantis Gate', 'Wyvern Roost',
-      'Vampire Castle', 'Bloodstone Crypt', 'Alchemist Lab', 'Shadow Keep', 'Banishment Curse!',
-      'Celestial Shrine', 'Sunfire Temple', 'Rune Chest', 'Solar Citadel', 'Dragon Flightline',
-      'Arcane Fate', 'Dragon Citadel', 'Imperial Tribute', 'Throne of Eldoria'
+      'REALM GATE / GO', 'Goblin Bog', 'Wheel of Fate', 'Muddy Marsh', 'Royal Tithe', 'Griffon Aerie',
+      'Elfwood Hollow', 'Dragon\'s Hoard', 'Whispering Grove', 'Silverleaf Spires', 'Enchanted Dungeon',
+      'Dwarf Forge', 'Ley-Line Forge', 'Ironstone Keep', 'Hammerfall Peak', 'Pegasus Haven',
+      'Mage Academy', 'Wheel of Fate', 'Spellbook Library', 'Astral Observatory', 'Sacred Sanctuary',
+      'Mermaid Cove', 'Dragon\'s Hoard', 'Kraken Trench', 'Atlantis Gate', 'Wyvern Roost',
+      'Vampire Castle', 'Bloodstone Crypt', 'Mana Springs', 'Shadow Keep', 'Banishment Rift!',
+      'Celestial Shrine', 'Sunfire Temple', 'Dragon\'s Hoard', 'Solar Citadel', 'Dragon Flightline',
+      'Wheel of Fate', 'Dragon Citadel', 'Imperial Tribute', 'Throne of Eldoria'
     ],
   },
   cosmic_space: {
     name: 'Cosmic Space Expanse 🚀',
     icon: '🚀',
-    description: 'Interplanetary colonies, asteroid belts, and warp gates.',
+    description: 'Deep-space exploration outpost overlooking an active planetary system with orbital transit.',
     tiles: [
-      'WARP CORE GO', 'Moon Base Alpha', 'Cosmic Anomaly', 'Lunar Mines', 'Oxygen Fee', 'Solar Shuttle',
-      'Mars Outpost', 'Star Pod', 'Olympus Mons', 'Red Dust Crater', 'Zero-G Detention',
-      'Europa Oceans', 'Dark Matter Well', 'Titan Refinery', 'Enceladus Geysers', 'Orion Express',
-      'Asteroid Belt A', 'Cosmic Anomaly', 'Ceres Station', 'Vesta Colony', 'Orbital Lounge',
-      'Jupiter Cloud City', 'Star Pod', 'Ganymede Biosphere', 'Io Volcanic Forge', 'Warp Gate Relay',
-      'Saturn Rings', 'Titan Metropolis', 'Plasma Reactor', 'Neptune Abyss', 'Tractor Beam Trap!',
-      'Kuiper Station', 'Pluto Outpost', 'Star Pod', 'Oort Cloud Hub', 'Interstellar Rail',
-      'Cosmic Anomaly', 'Alpha Centauri I', 'Galactic Tariff', 'Supermassive Core'
+      'LAUNCH GATEWAY / GO', 'Moon Base Alpha', 'Mission Control', 'Lunar Mining Rig', 'Life Support Tax', 'Orbital Shuttle One',
+      'Mars Outpost', 'Cosmic Vault', 'Olympus Mons', 'Red Dust Crater', 'Zero-G Detention',
+      'Europa Oceans', 'Solar Reactor', 'Titan Refinery', 'Enceladus Geysers', 'Lunar Transit Express',
+      'Asteroid Belt A', 'Mission Control', 'Ceres Station', 'Vesta Colony', 'Zero-G Observation Lounge',
+      'Jupiter Cloud City', 'Cosmic Vault', 'Ganymede Biosphere', 'Io Volcanic Forge', 'Mars Transfer Shuttle',
+      'Saturn Rings', 'Titan Metropolis', 'Life Support Grid', 'Neptune Abyss', 'Detention Airlock!',
+      'Kuiper Station', 'Pluto Outpost', 'Cosmic Vault', 'Oort Cloud Hub', 'Deep Space Express',
+      'Mission Control', 'Alpha Centauri Colony', 'Galactic Customs Fee', 'Interstellar Grand Outpost'
     ],
   },
   anime_akiba: {
     name: 'Anime Akiba District 🌸',
     icon: '🌸',
-    description: 'Vibrant neon anime haven filled with arcades, ramen, and mechas.',
+    description: 'Vibrant Tokyo nighttime entertainment haven filled with arcades, maid cafés, and anime towers.',
     tiles: [
-      'OPENING SCENE', 'Gacha Corner', 'Plot Twist', 'Manga Cafe', 'Otaku Tax', 'Bullet Train Alpha',
-      'Ramen Alley', 'Lucky Capsule', 'Boba Street', 'Cosplay Plaza', 'Principal\'s Office',
-      'Arcade Zone', 'Vending Empire', 'Rhythm Game Hall', 'Crane Claw Oasis', 'Bullet Train Beta',
-      'Idol Stage', 'Plot Twist', 'Concert Arena', 'Studio HQ', 'Onsen Hot Spring',
-      'Shonen Dojo', 'Lucky Capsule', 'Ninja Hideout', 'Samurai Pavilion', 'Bullet Train Gamma',
-      'Cyber Maid Cafe', 'Neko Paradise', 'Energy Drink Plant', 'Kawaii Wonderland', 'Detention Hall!',
-      'Mecha Hangar', 'Gundam Bay', 'Lucky Capsule', 'Skyline Tower', 'Bullet Train Delta',
-      'Plot Twist', 'Akiba Main Street', 'VIP Merch Tax', 'Anime Expo Summit'
+      'AKIBA STATION / GO', 'Gacha Alley', 'Manga Capsule', 'Otaku Boutique', 'Tokyo District Tax', 'Yamanote Rail Alpha',
+      'Ramen Yokocho', 'Lucky Cat Shrine', 'Boba Tea Lane', 'Cosplay Boulevard', 'District Koban',
+      'Retro Arcade Zone', 'Tokyo Electric Grid', 'Rhythm Game Hall', 'UFO Catcher Oasis', 'Yamanote Rail Beta',
+      'Idol Live Stage', 'Manga Capsule', 'Concert Dome', 'Animation Studio HQ', 'Otaku Leisure Plaza',
+      'Card Battle Dojo', 'Lucky Cat Shrine', 'Figure Showcase Ave', 'Radio Kaikan Plaza', 'Yamanote Rail Gamma',
+      'Moonlight Maid Cafe', 'Neko Sanctuary', 'High-Speed Optical Grid', 'Kawaii Wonderland', 'Police Transfer!',
+      'Mecha Model Hangar', 'Giant Robot Bay', 'Lucky Cat Shrine', 'Akiba Central Tower', 'Yamanote Express Line',
+      'Manga Capsule', 'Chuo-Dori Main Ave', 'Collector Import Tariff', 'Akiba Grand Apex Tower'
     ],
   },
   casino_royale: {
@@ -338,6 +338,21 @@ export const THEME_NAMES: Record<BoardThemeId, { name: string; icon: string; des
       'Crown Casino', 'Macau Tower', 'Dice Pit Substation', 'Mirage Oasis', 'Security Lockdown!',
       'Grand Diamond Tier', 'Billionaire Suite', 'Quake Slots', 'The Mega Jackpot', 'Hyperloop Royale',
       'Lucky Roulette', 'The Penthouse Vault', 'High Roller Tax', 'The Sultan Palace'
+    ],
+  },
+  pixel_arcade: {
+    name: 'Pixel Quest 8-Bit 🎮',
+    icon: '🎮',
+    description: 'Retro 8-bit indie adventure with hyperwarp relays, pixel cottages, and chiptune vibes.',
+    tiles: [
+      'INSERT COIN / GO', 'Pixel Plains', 'Mystery Item 🎁', 'Bit Valley', 'Arcade Token Tax', 'Hyperwarp Alpha',
+      '8-Bit Castle', 'Quest Chest 📦', 'Sprite Hollow', 'Pixel Citadel', 'Dungeon Cell',
+      'Chiptune Studio', 'Mana Power Station', 'Retro Arcade Hall', 'Game Console Strip', 'Hyperwarp Beta',
+      'Speedrun Way', 'Mystery Item 🎁', 'Boss Arena', 'Glitch Canyon', 'SAVE POINT 💾',
+      'Dragon Lair', 'Quest Chest 📦', 'Cinder Volcano', 'Obsidian Keep', 'Hyperwarp Gamma',
+      'High Score Blvd', 'Polyhedral Plaza', 'Crystal Core Station', 'Neo-Arcade District', 'GAME OVER TRAP!',
+      'Vector City', 'Cyber Matrix Sector', 'Quest Chest 📦', 'Polyhedral Peak', 'Hyperwarp Delta',
+      'Mystery Item 🎁', 'Final Boss Tower', 'Microtransaction Tax', 'The Master Cartridge'
     ],
   },
 };

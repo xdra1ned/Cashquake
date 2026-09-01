@@ -11,6 +11,7 @@ import {
   UserSession,
 } from '@shared/types';
 import { PACING_CONFIG } from '../config/pacing';
+import { DICE_SKIN_STYLES } from '../theme/cosmeticsRegistry';
 import { useAudio } from './AudioContext';
 
 export type TurnPresentationPhase =
@@ -93,14 +94,14 @@ const DEFAULT_SESSION: UserSession = {
     avatarId: 'av_star',
     avatarIcon: '⭐',
     color: '#EC4899',
-    diceSkin: 'dice_gold',
+    diceSkin: 'dice_classic',
     trailEffect: 'trail_sparkles',
     title: 'Quake Tycoon',
   },
   quakeCoins: 500,
   unlockedSkins: ['av_star', 'av_cat', 'av_robot'],
-  unlockedDice: ['dice_classic', 'dice_gold'],
-  unlockedThemes: ['world_tour', 'cyber_neon', 'mystic_fantasy', 'cosmic_space', 'anime_akiba', 'casino_royale'],
+  unlockedDice: ['dice_classic'],
+  unlockedThemes: ['world_tour', 'cyber_neon', 'mystic_fantasy', 'cosmic_space', 'anime_akiba', 'casino_royale', 'pixel_arcade'],
   stats: {
     matchesPlayed: 0,
     matchesWon: 0,
@@ -170,7 +171,23 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const saved = localStorage.getItem('cashquake_session');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (!parsed.customization) {
+          parsed.customization = { ...DEFAULT_SESSION.customization };
+        }
+        // Gracefully validate diceSkin and fall back to 'dice_classic' if missing or unrecognized
+        if (!parsed.customization.diceSkin || !DICE_SKIN_STYLES[parsed.customization.diceSkin]) {
+          parsed.customization.diceSkin = 'dice_classic';
+        }
+        // Ensure unlockedDice contains at least 'dice_classic'
+        if (!Array.isArray(parsed.unlockedDice) || !parsed.unlockedDice.includes('dice_classic')) {
+          parsed.unlockedDice = Array.from(new Set(['dice_classic', ...(parsed.unlockedDice || [])]));
+        }
+        // Ensure unlockedThemes contains 'pixel_arcade'
+        if (Array.isArray(parsed.unlockedThemes) && !parsed.unlockedThemes.includes('pixel_arcade')) {
+          parsed.unlockedThemes.push('pixel_arcade');
+        }
+        return parsed;
       } catch (e) {}
     }
     return DEFAULT_SESSION;
@@ -264,7 +281,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             if (!processedChatIdsRef.current.has(m.id)) {
               processedChatIdsRef.current.add(m.id);
               if (m.playerId !== myPlayerId) {
-                audio.playChatNotification();
+                audio.playChatNotification(updatedState.themeId);
               }
             }
           });

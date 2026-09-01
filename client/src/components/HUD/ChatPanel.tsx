@@ -152,42 +152,66 @@ export const ChatPanel: React.FC = () => {
         ) : (
           chatMessages.map((msg) => {
             const isMe = msg.playerId === myPlayerId;
+            const player = gameState?.players[msg.playerId];
+            const isEliminated = player ? Boolean(player.isBankrupt || player.isSpectator) : false;
 
             return (
               <div
                 key={msg.id}
-                className={`flex items-start gap-1.5 ${isMe ? 'flex-row-reverse' : 'flex-row'}`}
+                className={`flex items-start gap-1.5 ${isMe ? 'flex-row-reverse' : 'flex-row'} ${
+                  isEliminated ? 'opacity-85' : 'opacity-100'
+                }`}
               >
                 <div
-                  className="w-6 h-6 rounded-lg shrink-0 flex items-center justify-center border shadow-inner mt-0.5"
+                  className={`w-6 h-6 rounded-lg shrink-0 flex items-center justify-center border shadow-inner mt-0.5 transition-all ${
+                    isEliminated ? 'grayscale-[50%] opacity-70 border-slate-700' : ''
+                  }`}
                   style={{
-                    backgroundColor: `${msg.playerColor}25`,
-                    borderColor: msg.playerColor,
+                    backgroundColor: isEliminated ? `${msg.playerColor}15` : `${msg.playerColor}25`,
+                    borderColor: isEliminated ? `${msg.playerColor}60` : msg.playerColor,
                   }}
                 >
                   <AvatarSilhouette
                     avatarId={msg.avatarId || 'av_star'}
-                    color={msg.playerColor}
+                    color={isEliminated ? `${msg.playerColor}99` : msg.playerColor}
                     size={13}
                   />
                 </div>
 
                 <div
-                  className={`max-w-[85%] rounded-xl px-2.5 py-1.5 shadow-sm border ${
-                    isMe
-                      ? 'bg-gradient-to-br from-purple-900/60 to-slate-900 border-purple-500/40 text-purple-100'
-                      : 'bg-slate-800/80 border-slate-700 text-slate-200'
+                  className={`max-w-[85%] rounded-xl px-2.5 py-1.5 shadow-sm border transition-all ${
+                    isEliminated
+                      ? isMe
+                        ? 'bg-slate-900/90 border-slate-700/80 text-slate-300'
+                        : 'bg-slate-900/80 border-slate-800 text-slate-300'
+                      : isMe
+                        ? 'bg-gradient-to-br from-purple-900/60 to-slate-900 border-purple-500/40 text-purple-100'
+                        : 'bg-slate-800/80 border-slate-700 text-slate-200'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-0.5 text-[9.5px]">
-                    <span className="font-bold truncate" style={{ color: msg.playerColor }}>
-                      {isMe ? 'You' : msg.playerName}
-                    </span>
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span
+                        className={`font-bold truncate transition-colors ${
+                          isEliminated ? 'opacity-70' : 'opacity-100'
+                        }`}
+                        style={{ color: isEliminated ? `${msg.playerColor}cc` : msg.playerColor }}
+                      >
+                        {isMe ? 'You' : msg.playerName}
+                      </span>
+                      {isEliminated && (
+                        <span className="text-[8.5px] px-1 py-0.2 rounded font-mono font-bold bg-slate-800/90 border border-slate-700/70 text-slate-400 shrink-0">
+                          SPECTATOR
+                        </span>
+                      )}
+                    </div>
                     <span className="font-mono text-slate-400 text-[8.5px] tabular-nums shrink-0">
                       {formatTime(msg.timestamp)}
                     </span>
                   </div>
-                  <p className="text-[11px] leading-relaxed break-words font-medium">{msg.message}</p>
+                  <p className="text-[11px] leading-relaxed break-words font-medium text-slate-200">
+                    {msg.message}
+                  </p>
                 </div>
               </div>
             );

@@ -136,22 +136,37 @@ export const PlayerHUD: React.FC<PlayerHUDProps> = ({ layout = 'horizontal' }) =
                 />
               </div>
 
-              {/* Turn Crown / Bankrupt Skull / Prison / Disconnected Badges */}
+              {/* Host Crown */}
+              {player.isHost && (
+                <div
+                  className="absolute -top-1.5 -right-1 w-4 h-4 rounded-full bg-amber-500/30 border border-amber-400 flex items-center justify-center shadow-sm z-10"
+                  title="Lobby Host"
+                >
+                  <Crown className="w-2.5 h-2.5 text-amber-300 fill-amber-300" />
+                </div>
+              )}
+
+              {/* Status Badges: Bankrupt Skull / Prison / Disconnected */}
               {player.isBankrupt ? (
-                <div className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-950 border border-red-500 flex items-center justify-center">
+                <div
+                  className={`absolute ${player.isHost ? '-bottom-1 -right-1.5' : '-top-1.5 -right-1.5'} w-4 h-4 rounded-full bg-red-950 border border-red-500 flex items-center justify-center`}
+                  title="Bankrupt"
+                >
                   <Skull className="w-2.5 h-2.5 text-red-400" />
                 </div>
               ) : isDisconnected ? (
-                <div className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-amber-950 border border-amber-500 flex items-center justify-center animate-pulse">
+                <div
+                  className={`absolute ${player.isHost ? '-bottom-1 -right-1.5' : '-top-1.5 -right-1.5'} w-4 h-4 rounded-full bg-amber-950 border border-amber-500 flex items-center justify-center animate-pulse`}
+                  title="Disconnected"
+                >
                   <WifiOff className="w-2.5 h-2.5 text-amber-400" />
                 </div>
               ) : player.inPrison ? (
-                <div className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose-950 border border-rose-500 flex items-center justify-center">
+                <div
+                  className={`absolute ${player.isHost ? '-bottom-1 -right-1.5' : '-top-1.5 -right-1.5'} w-4 h-4 rounded-full bg-rose-950 border border-rose-500 flex items-center justify-center`}
+                  title="In Prison"
+                >
                   <Lock className="w-2.5 h-2.5 text-rose-400" />
-                </div>
-              ) : isCurrentTurn ? (
-                <div className="absolute -top-1.5 -right-1 w-4 h-4 rounded-full bg-amber-500/30 border border-amber-400 flex items-center justify-center shadow-sm">
-                  <Crown className="w-2.5 h-2.5 text-amber-300 fill-amber-300" />
                 </div>
               ) : null}
             </div>

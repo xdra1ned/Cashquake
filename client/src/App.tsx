@@ -53,6 +53,25 @@ const GameArena: React.FC = () => {
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
   const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(false);
 
+  // Dynamic Theme BGM Management (Lifecycle-Safe & Continuous)
+  React.useEffect(() => {
+    const isGameActive = gameState?.phase && gameState.phase !== 'lobby' && gameState.phase !== 'game_over';
+    const isAuction = gameState?.phase === 'auction' || !!gameState?.activeAuction;
+    const currentTrack = isAuction ? 'auction' : 'gameplay';
+
+    if (isGameActive && gameState?.themeId) {
+      audio.startThemeBgm(gameState.themeId, currentTrack);
+    } else if (gameState?.phase === 'lobby' || gameState?.phase === 'game_over') {
+      audio.stopThemeBgm();
+    }
+  }, [
+    gameState?.phase === 'lobby',
+    gameState?.phase === 'game_over',
+    gameState?.themeId,
+    gameState?.phase === 'auction',
+    !!gameState?.activeAuction,
+  ]);
+
   if (!gameState || gameState.phase === 'lobby') {
     return <LobbyScreen />;
   }

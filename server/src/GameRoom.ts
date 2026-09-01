@@ -85,7 +85,10 @@ export class GameRoom {
         mortgaged: {},
         getOutOfJailCards: 0,
       },
-      customization: hostCustomization,
+      customization: {
+        ...(hostCustomization || {}),
+        diceSkin: hostCustomization?.diceSkin || 'dice_classic',
+      },
       stats: {
         rentCollected: 0,
         rentPaid: 0,
@@ -283,6 +286,7 @@ export class GameRoom {
 
     const playerCustomization = {
       ...(customization || {}),
+      diceSkin: customization?.diceSkin || 'dice_classic',
       color: this.getDistinctColor(customization?.color),
     };
 

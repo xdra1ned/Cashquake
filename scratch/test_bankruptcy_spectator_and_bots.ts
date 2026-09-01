@@ -13,7 +13,7 @@ function runTests() {
       emit: () => {},
     };
 
-    const room = new GameRoom('TEST99', mockIo);
+    const room = new GameRoom('TEST99', 'p1', 'Alice', mockIo);
     const p1: Player = {
       id: 'p1',
       name: 'Alice',

@@ -129,7 +129,8 @@ export type BoardThemeId =
   | 'mystic_fantasy'
   | 'cosmic_space'
   | 'anime_akiba'
-  | 'casino_royale';
+  | 'casino_royale'
+  | 'pixel_arcade';
 
 export type CasinoEventType = 'roulette' | 'slots';
 

@@ -10,7 +10,7 @@ interface PawnRendererProps {
 }
 
 export const PawnRenderer: React.FC<PawnRendererProps> = ({ playersOnTile, activePlayerId }) => {
-  const { isPawnStepping, activeMovingPlayerId, inspectedPlayerId } = useSocket();
+  const { isPawnStepping, activeMovingPlayerId, inspectedPlayerId, gameState } = useSocket();
   if (!playersOnTile || playersOnTile.length === 0) return null;
 
   const count = playersOnTile.length;
@@ -74,7 +74,9 @@ export const PawnRenderer: React.FC<PawnRendererProps> = ({ playersOnTile, activ
 
               {/* Pawn Base Token */}
               <div
-                className={`rounded-xl flex items-center justify-center shadow-md transition-all ${
+                className={`${
+                  gameState?.themeId === 'pixel_arcade' ? 'rounded-none border-2' : 'rounded-xl'
+                } flex items-center justify-center shadow-md transition-all ${
                   isMulti && !isInspected ? 'w-5 h-5 sm:w-6 sm:h-6' : 'w-6 h-6 sm:w-7 sm:h-7'
                 } ${
                   isInspected

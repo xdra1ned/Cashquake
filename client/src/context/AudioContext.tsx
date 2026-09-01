@@ -32,10 +32,42 @@ interface AudioContextType {
   playCasinoJackpot: () => void;
   playChipClink: () => void;
   playSmallWin: () => void;
-  playChatNotification: () => void;
+  playChatNotification: (themeId?: string) => void;
   playCardDeal: () => void;
   playThemeTransit: (themeId?: string) => void;
   playThemeSpecialEvent: (themeId?: string) => void;
+  startThemeBgm: (themeId?: string, track?: 'gameplay' | 'lobby' | 'auction') => void;
+  stopThemeBgm: () => void;
+  playThemeSound: (soundName: string, themeId?: string) => void;
+  playCityTerminalSound: () => void;
+  playMetroChime: () => void;
+  playTrafficBeep: () => void;
+  playBillboardClick: () => void;
+  playHelipadBeacon: () => void;
+  playCyberTerminalSound: () => void;
+  playSecurityScanSound: () => void;
+  playCyberTransitSound: () => void;
+  playBillboardPulseSound: () => void;
+  playDroneScanSound: () => void;
+  playNetworkNodeSound: () => void;
+  playGrimoireOpenSound: () => void;
+  playCrystalShimmerSound: () => void;
+  playRunePulseSound: () => void;
+  playFountainRippleSound: () => void;
+  playCauldronBubbleSound: () => void;
+  playWispChimeSound: () => void;
+  playTelescopeScanSound: () => void;
+  playSatelliteRelaySound: () => void;
+  playDockingClampSound: () => void;
+  playAstronautCommsSound: () => void;
+  playPlanetariumRotateSound: () => void;
+  playAsteroidScanSound: () => void;
+  playAnimeBillboardSound: () => void;
+  playGachaponSound: () => void;
+  playArcadeSound: () => void;
+  playCafeChime: () => void;
+  playVendingMachineSound: () => void;
+  playTrainArrivalSound: () => void;
 }
 
 const AudioCtx = createContext<AudioContextType | null>(null);
@@ -54,6 +86,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const lastChatSoundTimeRef = useRef<number>(0);
   const audioContextRef = useRef<AudioContext | null>(null);
   const chatAudioRef = useRef<HTMLAudioElement | null>(null);
+  const currentBgmAudioRef = useRef<HTMLAudioElement | null>(null);
+  const currentBgmTrackRef = useRef<string | null>(null);
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
 
   useEffect(() => {
@@ -92,6 +126,12 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       window.removeEventListener('keydown', initAudio);
       window.removeEventListener('pointerdown', initAudio);
       window.removeEventListener('touchstart', initAudio);
+      if (currentBgmAudioRef.current) {
+        try {
+          currentBgmAudioRef.current.pause();
+          currentBgmAudioRef.current = null;
+        } catch (e) {}
+      }
     };
   }, []);
 
@@ -99,6 +139,13 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setIsMuted((prev) => {
       const next = !prev;
       localStorage.setItem('cashquake_muted', String(next));
+      if (currentBgmAudioRef.current) {
+        if (next) {
+          currentBgmAudioRef.current.pause();
+        } else {
+          currentBgmAudioRef.current.play().catch(() => {});
+        }
+      }
       return next;
     });
   };
@@ -680,8 +727,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   };
 
-  // Chat incoming notification: MP3 asset playback with centralized cooldown protection & clear diagnostics
-  const playChatNotification = () => {
+  // Chat incoming notification: MP3/WAV asset playback with centralized cooldown protection & clear diagnostics
+  const playChatNotification = (themeId?: string) => {
     if (isChatMuted || isMuted) {
       return;
     }
@@ -694,7 +741,10 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     lastChatSoundTimeRef.current = now;
 
     try {
-      const sound = new Audio('/sounds/chat-notification.mp3');
+      const soundSrc = themeId === 'pixel_arcade'
+        ? '/themes/pixel_arcade/audio/pixel-chat-blip.wav'
+        : '/sounds/chat-notification.mp3';
+      const sound = new Audio(soundSrc);
       sound.volume = 0.8;
       const playPromise = sound.play();
       if (playPromise !== undefined) {
@@ -703,8 +753,452 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         });
       }
     } catch (err) {
-      console.error('💬 [Cashquake Audio] Failed to play chat-notification.mp3:', err);
+      console.error('💬 [Cashquake Audio] Failed to play chat notification:', err);
     }
+  };
+
+  // Theme sound effect playback helper (e.g. for pixel_arcade 8-bit assets)
+  const playThemeSound = (soundName: string, themeId?: string) => {
+    if (isMuted) return;
+    if (themeId === 'pixel_arcade') {
+      try {
+        const sound = new Audio(`/themes/pixel_arcade/audio/${soundName}.wav`);
+        sound.volume = 0.7;
+        sound.play().catch(() => {});
+      } catch (e) {}
+    }
+  };
+
+  // Background music management for themes
+  const stopThemeBgm = () => {
+    if (currentBgmAudioRef.current) {
+      try {
+        currentBgmAudioRef.current.pause();
+        currentBgmAudioRef.current.currentTime = 0;
+        currentBgmAudioRef.current = null;
+        currentBgmTrackRef.current = null;
+      } catch (e) {}
+    }
+  };
+
+  const startThemeBgm = (themeId?: string, track: 'gameplay' | 'lobby' | 'auction' = 'gameplay') => {
+    const validThemes = ['pixel_arcade', 'world_tour', 'cyber_neon', 'mystic_fantasy', 'cosmic_space', 'anime_akiba', 'casino_royale'];
+    if (!themeId || !validThemes.includes(themeId)) {
+      stopThemeBgm();
+      return;
+    }
+
+    const trackKey = `${themeId}_${track}`;
+    // If the exact same track is already playing or loaded, do NOT restart it or create a new instance!
+    if (currentBgmTrackRef.current === trackKey && currentBgmAudioRef.current) {
+      if (!isMuted && currentBgmAudioRef.current.paused) {
+        currentBgmAudioRef.current.play().catch(() => {});
+      }
+      return; // Already initialized and playing seamlessly without any restart
+    }
+
+    // If changing to a new track/theme, pause old instance
+    if (currentBgmAudioRef.current) {
+      try {
+        currentBgmAudioRef.current.pause();
+        currentBgmAudioRef.current.currentTime = 0;
+      } catch (e) {}
+      currentBgmAudioRef.current = null;
+    }
+    currentBgmTrackRef.current = trackKey;
+
+    try {
+      let bgmBaseName = '';
+      if (themeId === 'casino_royale') {
+        bgmBaseName = `/themes/casino_royale/audio/casino-bgm-${track}`;
+      } else if (themeId === 'pixel_arcade') {
+        bgmBaseName = `/themes/pixel_arcade/audio/pixel-bgm-${track}`;
+      } else if (themeId === 'world_tour') {
+        bgmBaseName = `/themes/world_tour/audio/metropolis-bgm-${track}`;
+      } else if (themeId === 'cyber_neon') {
+        bgmBaseName = `/themes/cyber_neon/audio/cyber-bgm-${track}`;
+      } else if (themeId === 'mystic_fantasy') {
+        bgmBaseName = `/themes/mystic_fantasy/audio/mystic-bgm-${track}`;
+      } else if (themeId === 'cosmic_space') {
+        bgmBaseName = `/themes/cosmic_space/audio/cosmic-bgm-${track === 'auction' ? 'gameplay' : track}`;
+      } else if (themeId === 'anime_akiba') {
+        bgmBaseName = `/themes/anime_akiba/audio/anime-akiba-bgm-${track === 'auction' ? 'gameplay' : track}`;
+      }
+
+      if (bgmBaseName) {
+        // Try MP3 first, fallback to WAV
+        const mp3Src = `${bgmBaseName}.mp3`;
+        const wavSrc = `${bgmBaseName}.wav`;
+        const bgm = new Audio(mp3Src);
+        bgm.loop = true;
+        bgm.volume = (themeId === 'world_tour') ? 0.28 : (themeId === 'anime_akiba') ? 0.25 : 0.26;
+        
+        bgm.addEventListener('error', () => {
+          if (bgm.src.endsWith('.mp3')) {
+            bgm.src = wavSrc;
+            if (!isMuted && currentBgmTrackRef.current === trackKey) {
+              bgm.play().catch(() => {});
+            }
+          }
+        }, { once: true });
+
+        currentBgmAudioRef.current = bgm;
+
+        if (!isMuted) {
+          const playPromise = bgm.play();
+          if (playPromise !== undefined) {
+            playPromise.catch((err) => {
+              console.warn(`🌌 [${themeId} Audio] BGM playback deferred until user interaction:`, err);
+            });
+          }
+        }
+      }
+    } catch (e) {
+      console.warn(`🌌 [${themeId} Audio] Failed to start theme BGM:`, e);
+    }
+  };
+
+  // World Metropolis Thematic Sound Effects
+  const playCityTerminalSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/world_tour/audio/metropolis-terminal-confirm.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {
+      const ctx = getCtx();
+      if (!ctx) return;
+      [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+        const t = ctx.currentTime + idx * 0.05;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.08, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.13);
+      });
+    }
+  };
+
+  const playMetroChime = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/world_tour/audio/metropolis-metro-chime.wav');
+      sound.volume = 0.7;
+      sound.play().catch(() => {});
+    } catch (e) {
+      const ctx = getCtx();
+      if (!ctx) return;
+      [659.25, 783.99].forEach((freq, idx) => {
+        const t = ctx.currentTime + idx * 0.22;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.12, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.3);
+      });
+    }
+  };
+
+  const playTrafficBeep = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/world_tour/audio/metropolis-traffic-beep.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {
+      const ctx = getCtx();
+      if (!ctx) return;
+      const t = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1200, t);
+      gain.gain.setValueAtTime(0.08, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.09);
+    }
+  };
+
+  const playBillboardClick = () => {
+    const ctx = getCtx();
+    if (!ctx) return;
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(880, t);
+    osc.frequency.exponentialRampToValueAtTime(440, t + 0.05);
+    gain.gain.setValueAtTime(0.07, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.05);
+  };
+
+  const playHelipadBeacon = () => {
+    const ctx = getCtx();
+    if (!ctx) return;
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1480, t);
+    osc.frequency.setValueAtTime(1760, t + 0.04);
+    gain.gain.setValueAtTime(0.05, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.11);
+  };
+
+  // Cyber Neon 2099 Thematic Sound Effects
+  const playCyberTerminalSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cyber_neon/audio/cyber-terminal-chime.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {
+      const ctx = getCtx();
+      if (!ctx) return;
+      [587.33, 739.99, 880.0, 1174.66].forEach((freq, idx) => {
+        const t = ctx.currentTime + idx * 0.06;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.08, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.13);
+      });
+    }
+  };
+
+  const playSecurityScanSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cyber_neon/audio/cyber-security-scan.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playCyberTransitSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cyber_neon/audio/cyber-transit-chime.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playBillboardPulseSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cyber_neon/audio/cyber-billboard-pulse.wav');
+      sound.volume = 0.55;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playDroneScanSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cyber_neon/audio/cyber-drone-scan.wav');
+      sound.volume = 0.55;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playNetworkNodeSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cyber_neon/audio/cyber-network-pulse.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playGrimoireOpenSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/mystic_fantasy/audio/mystic-grimoire-open.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playCrystalShimmerSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/mystic_fantasy/audio/mystic-crystal-shimmer.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playRunePulseSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/mystic_fantasy/audio/mystic-rune-pulse.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playFountainRippleSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/mystic_fantasy/audio/mystic-fountain-ripple.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playWispChimeSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/mystic_fantasy/audio/mystic-wisp-chime.wav');
+      sound.volume = 0.55;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playCauldronBubbleSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/mystic_fantasy/audio/mystic-cauldron-bubble.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  // Cosmic Space Expanse Thematic Sound Effects
+  const playTelescopeScanSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cosmic_space/audio/cosmic-telescope-scan.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playSatelliteRelaySound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cosmic_space/audio/cosmic-satellite-relay.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playDockingClampSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cosmic_space/audio/cosmic-docking-clamp.wav');
+      sound.volume = 0.7;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playAstronautCommsSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cosmic_space/audio/cosmic-astronaut-comms.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playPlanetariumRotateSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cosmic_space/audio/cosmic-planetarium-rotate.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playAsteroidScanSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/cosmic_space/audio/cosmic-asteroid-scan.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  // Anime Akiba District Thematic Sound Effects
+  const playAnimeBillboardSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/anime_akiba/audio/anime-billboard-cycle.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playGachaponSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/anime_akiba/audio/anime-gachapon-turn.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playArcadeSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/anime_akiba/audio/anime-arcade-coin.wav');
+      sound.volume = 0.6;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playCafeChime = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/anime_akiba/audio/anime-cafe-chime.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playVendingMachineSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/anime_akiba/audio/anime-vending-drop.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
+  };
+
+  const playTrainArrivalSound = () => {
+    if (isMuted) return;
+    try {
+      const sound = new Audio('/themes/anime_akiba/audio/anime-train-arrival.wav');
+      sound.volume = 0.65;
+      sound.play().catch(() => {});
+    } catch (e) {}
   };
 
   // Crisp multi-card deck deal flutter
@@ -729,6 +1223,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Theme Transit Signature Sound
   const playThemeTransit = (themeId?: string) => {
+    if (themeId === 'pixel_arcade') {
+      playThemeSound('pixel-token-hop', 'pixel_arcade');
+      return;
+    }
+
     const ctx = getCtx();
     if (!ctx) return;
 
@@ -757,43 +1256,41 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       osc.frequency.setValueAtTime(880, t);
       osc.frequency.exponentialRampToValueAtTime(220, t + 0.45);
       gain.gain.setValueAtTime(0.06, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(t);
-      osc.stop(t + 0.48);
+      osc.stop(t + 0.5);
     } else if (themeId === 'mystic_fantasy') {
-      // Arcane Crystal Harp Sparkle
-      const notes = [523.25, 659.25, 783.99, 987.77, 1174.66];
+      // Arcane Crystal Shimmer
+      const notes = [523.25, 659.25, 783.99, 1046.5];
       notes.forEach((f, idx) => {
-        const t = ctx.currentTime + idx * 0.06;
+        const t = ctx.currentTime + idx * 0.08;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'triangle';
+        osc.type = 'sine';
         osc.frequency.setValueAtTime(f, t);
         gain.gain.setValueAtTime(0.05, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(t);
-        osc.stop(t + 0.28);
+        osc.stop(t + 0.45);
       });
     } else if (themeId === 'cyber_neon') {
-      // Cyber Data Packet Ping
-      const notes = [1046.5, 1396.91, 2093.0];
-      notes.forEach((f, idx) => {
-        const t = ctx.currentTime + idx * 0.04;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(f, t);
-        gain.gain.setValueAtTime(0.03, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(t);
-        osc.stop(t + 0.07);
-      });
+      // High-tech Data Pulse
+      const t = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(1200, t);
+      osc.frequency.exponentialRampToValueAtTime(2400, t + 0.1);
+      gain.gain.setValueAtTime(0.04, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.18);
     } else if (themeId === 'anime_akiba') {
       // Retro 8-bit Arcade Transit Fanfare
       const notes = [440.0, 554.37, 659.25, 880.0];
@@ -817,6 +1314,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Theme Special Card / Anomaly Announcement Cue
   const playThemeSpecialEvent = (themeId?: string) => {
+    if (themeId === 'pixel_arcade') {
+      playThemeSound('pixel-coin-purchase', 'pixel_arcade');
+      return;
+    }
+
     const ctx = getCtx();
     if (!ctx) return;
 
@@ -908,6 +1410,38 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         playCardDeal,
         playThemeTransit,
         playThemeSpecialEvent,
+        startThemeBgm,
+        stopThemeBgm,
+        playThemeSound,
+        playCityTerminalSound,
+        playMetroChime,
+        playTrafficBeep,
+        playBillboardClick,
+        playHelipadBeacon,
+        playCyberTerminalSound,
+        playSecurityScanSound,
+        playCyberTransitSound,
+        playBillboardPulseSound,
+        playDroneScanSound,
+        playNetworkNodeSound,
+        playGrimoireOpenSound,
+        playCrystalShimmerSound,
+        playRunePulseSound,
+        playFountainRippleSound,
+        playWispChimeSound,
+        playCauldronBubbleSound,
+        playTelescopeScanSound,
+        playSatelliteRelaySound,
+        playDockingClampSound,
+        playAstronautCommsSound,
+        playPlanetariumRotateSound,
+        playAsteroidScanSound,
+        playAnimeBillboardSound,
+        playGachaponSound,
+        playArcadeSound,
+        playCafeChime,
+        playVendingMachineSound,
+        playTrainArrivalSound,
       }}
     >
       {children}

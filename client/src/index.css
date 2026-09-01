@@ -6,6 +6,8 @@
   --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-arcade: 'Silkscreen', 'Press Start 2P', monospace;
 }
 
 @layer base {
@@ -122,4 +124,53 @@
 .animate-slide-up {
   animation: slideUpSubtle 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* --- Pixel Arcade Theme Utilities --- */
+.font-pixel {
+  font-family: var(--font-pixel);
+  letter-spacing: -0.02em;
+}
+
+.font-arcade {
+  font-family: var(--font-arcade);
+}
+
+.pixel-corners {
+  clip-path: polygon(
+    0 4px, 4px 4px, 4px 0,
+    calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%,
+    4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
+  );
+}
+
+.pixel-border-sm {
+  box-shadow: 
+    0 -2px 0 0 rgba(0,0,0,0.6),
+    0 2px 0 0 rgba(0,0,0,0.6),
+    -2px 0 0 0 rgba(0,0,0,0.6),
+    2px 0 0 0 rgba(0,0,0,0.6);
+}
+
+.pixel-border-accent {
+  box-shadow: 
+    0 -2px 0 0 #a855f7,
+    0 2px 0 0 #a855f7,
+    -2px 0 0 0 #a855f7,
+    2px 0 0 0 #a855f7;
+}
+
+.crt-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 38, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 4px 100%;
+}
+
 
