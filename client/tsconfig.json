@@ -13,6 +13,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "typeRoots": [
+      "../node_modules/@types",
+      "./node_modules/@types"
+    ],
 
     /* Path Aliases */
     "paths": {
