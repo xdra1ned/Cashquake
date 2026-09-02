@@ -11,8 +11,8 @@
     "dev:server": "npm --prefix server run dev",
     "dev:client": "npm --prefix client run dev",
     "dev": "concurrently -n \"SERVER,CLIENT\" -c \"magenta,cyan\" \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
-    "build:server": "npm --prefix server run build",
-    "build:client": "npm --prefix client run build",
+    "build:server": "npm run build --workspace=server",
+    "build:client": "npm run build --workspace=client",
     "build": "npm run build:client && npm run build:server",
     "start": "npm --prefix server start"
   },
