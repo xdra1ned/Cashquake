@@ -71,7 +71,7 @@ The project uses a Node.js and Express backend with Socket.IO to keep player tur
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/Cashquake.git
+   git clone https://github.com/xdra1ned/Cashquake.git
    cd Cashquake
    ```
 
