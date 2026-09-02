@@ -1,12 +1,16 @@
 import cors from 'cors';
 import express from 'express';
 import { createServer } from 'http';
+import path from 'path';
 import { Server } from 'socket.io';
 import { RoomManager } from './RoomManager';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const clientDistPath = path.resolve(__dirname, '../../client/dist');
+app.use(express.static(clientDistPath));
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -28,6 +32,14 @@ app.get('/api/health', (req, res) => {
 
 app.get('/api/rooms', (req, res) => {
   res.json({ rooms: roomManager.listPublicRooms() });
+});
+
+// SPA fallback routing for non-API, non-Socket routes
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) {
+    return next();
+  }
+  res.sendFile(path.join(clientDistPath, 'index.html'));
 });
 
 // Socket.IO event handling
