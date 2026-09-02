@@ -190,6 +190,18 @@ export const SpecialTileGlyph: React.FC<SpecialTileGlyphProps> = ({
         </svg>
       );
     }
+    if (themeId === 'frutiger_aero') {
+      return (
+        <svg viewBox="0 0 32 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Aero Eco Containment Pod */}
+          <rect x="5" y="5" width="22" height="22" rx="6" fill="#08243E" stroke="#38BDF8" strokeWidth="1.8" />
+          <ellipse cx="16" cy="16" rx="8" ry="10" fill="#0EA5E9" fillOpacity="0.2" stroke="#7DD3FC" strokeWidth="1.2" />
+          <line x1="12" y1="8" x2="12" y2="24" stroke="#38BDF8" strokeWidth="1.2" strokeOpacity="0.6" />
+          <line x1="16" y1="8" x2="16" y2="24" stroke="#4ADE80" strokeWidth="1.5" />
+          <line x1="20" y1="8" x2="20" y2="24" stroke="#38BDF8" strokeWidth="1.2" strokeOpacity="0.6" />
+        </svg>
+      );
+    }
     return (
       <svg viewBox="0 0 32 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="5" y="6" width="22" height="20" rx="3" fill="#0F172A" stroke={color} strokeWidth="1.5" />

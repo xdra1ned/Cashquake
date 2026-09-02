@@ -787,7 +787,6 @@ export const ThemedCenterMotif: React.FC<CenterPatternProps> = ({
       );
 
     case 'anime_akiba':
-    default:
       // Anime Akiba District — Vibrant Night Street Panorama with Neon Storefronts, Elevated Yamanote Rail & Crosswalk
       return (
         <svg
@@ -1139,6 +1138,114 @@ export const ThemedCenterMotif: React.FC<CenterPatternProps> = ({
             >
               LEVEL 1
             </text>
+          </g>
+        </svg>
+      );
+
+    case 'frutiger_aero':
+    default:
+      // Frutiger Aero — Organic Aqua Glass Eco Oasis (Soft Cloud Reflections, Water Ripples & Glossy Droplets)
+      return (
+        <svg
+          viewBox="0 0 400 400"
+          preserveAspectRatio="xMidYMid meet"
+          className={`w-full h-full pointer-events-none select-none ${className}`}
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="aeroSunSkyGrad" x1="200" y1="20" x2="200" y2="380" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
+              <stop offset="30%" stopColor="#E0F2FE" stopOpacity="0.6" />
+              <stop offset="70%" stopColor="#BAE6FD" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#BBF7D0" stopOpacity="0.5" />
+            </linearGradient>
+            <radialGradient id="aeroGlassHalo" cx="200" cy="200" r="170" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
+              <stop offset="45%" stopColor="#E0F2FE" stopOpacity="0.6" />
+              <stop offset="85%" stopColor="#7DD3FC" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#38BDF8" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+
+          {/* Center Glass Backdrop Halo */}
+          <circle cx="200" cy="200" r="175" fill="url(#aeroGlassHalo)" />
+
+          {/* Organic Curved Aqua Water Wave Arcs */}
+          <path
+            d="M 40 220 Q 120 170 200 210 Q 280 250 360 190 Q 320 280 200 290 Q 80 300 40 220 Z"
+            fill="#38BDF8"
+            fillOpacity="0.15"
+          />
+          <path
+            d="M 50 180 Q 140 230 220 180 Q 300 130 350 200 Q 280 120 180 140 Q 80 160 50 180 Z"
+            fill="#4ADE80"
+            fillOpacity="0.18"
+          />
+
+          {/* Soft White Cloud Reflection Flanks */}
+          <path
+            d="M 120 120 Q 140 95 170 105 Q 195 85 230 100 Q 255 90 280 115 Q 295 130 275 140 Q 240 145 200 135 Q 150 145 120 120 Z"
+            fill="#FFFFFF"
+            fillOpacity="0.65"
+          />
+
+          {/* Organic Glossy Water Droplet Central Emblem */}
+          <g transform="translate(200, 195)">
+            {/* Glossy Droplet Outer Shadow / Glow */}
+            <path
+              d="M 0 -55 C 32 -12 45 22 32 44 C 20 62 -20 62 -32 44 C -45 22 -32 -12 0 -55 Z"
+              fill="#0EA5E9"
+              fillOpacity="0.2"
+              stroke="#38BDF8"
+              strokeWidth="3"
+            />
+            {/* Droplet Body Fill */}
+            <path
+              d="M 0 -48 C 26 -10 38 18 26 38 C 16 52 -16 52 -26 38 C -38 18 -26 -10 0 -48 Z"
+              fill="url(#aeroSunSkyGrad)"
+              stroke="#7DD3FC"
+              strokeWidth="1.5"
+            />
+            {/* White Specular Reflection Arc */}
+            <path
+              d="M -10 -30 C 12 -5 18 15 10 30"
+              fill="none"
+              stroke="#FFFFFF"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeOpacity="0.9"
+            />
+
+            {/* Fresh Green Eco Leaf Overlap */}
+            <path
+              d="M 5 10 Q -35 -20 -10 -40 Q 20 -10 5 10 Z"
+              fill="#22C55E"
+              fillOpacity="0.35"
+              stroke="#4ADE80"
+              strokeWidth="2"
+            />
+          </g>
+
+          {/* Floating Aqua Glass Bubbles with Specular Dots */}
+          <g transform="translate(95, 130)">
+            <circle cx="0" cy="0" r="14" fill="#E0F2FE" fillOpacity="0.7" stroke="#38BDF8" strokeWidth="1.5" />
+            <circle cx="-4" cy="-4" r="3.5" fill="#FFFFFF" fillOpacity="0.9" />
+          </g>
+
+          <g transform="translate(305, 135)">
+            <circle cx="0" cy="0" r="18" fill="#DCFCE7" fillOpacity="0.7" stroke="#4ADE80" strokeWidth="1.5" />
+            <circle cx="-5" cy="-5" r="4.5" fill="#FFFFFF" fillOpacity="0.9" />
+          </g>
+
+          <g transform="translate(110, 275)">
+            <circle cx="0" cy="0" r="12" fill="#E0F2FE" fillOpacity="0.7" stroke="#7DD3FC" strokeWidth="1.5" />
+            <circle cx="-3" cy="-3" r="3" fill="#FFFFFF" fillOpacity="0.9" />
+          </g>
+
+          <g transform="translate(290, 265)">
+            <circle cx="0" cy="0" r="15" fill="#E0F2FE" fillOpacity="0.7" stroke="#0EA5E9" strokeWidth="1.5" />
+            <circle cx="-4" cy="-4" r="3.5" fill="#FFFFFF" fillOpacity="0.9" />
           </g>
         </svg>
       );

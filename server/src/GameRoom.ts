@@ -20,6 +20,8 @@ import {
 } from '../../shared/gameLogic';
 import {
   ActiveCasinoEvent,
+  CasinoEventType,
+  GenericThemedOutcome,
   Alliance,
   AllianceAgreement,
   AllianceRequest,
@@ -800,21 +802,13 @@ export class GameRoom {
       this.addLog('prison', `🚨 ARRESTED! ${player.name} was sent directly to Detention!`, player.id);
       this.sendToPrison(player);
     }
-    // 5. Chance Card (or Lucky Roulette in Casino theme)
+    // 5. Chance Card (Theme-embedded interaction across all themes)
     else if (tile.type === 'chance') {
-      if (this.state.themeId === 'casino_royale') {
-        this.triggerCasinoEvent(player, 'roulette');
-      } else {
-        this.drawCard(player, 'chance');
-      }
+      this.triggerThemedEvent(player, 'chance');
     }
-    // 6. Fortune Card (or Quake Slots in Casino theme)
+    // 6. Fortune Card (Theme-embedded interaction across all themes)
     else if (tile.type === 'fortune') {
-      if (this.state.themeId === 'casino_royale') {
-        this.triggerCasinoEvent(player, 'slots');
-      } else {
-        this.drawCard(player, 'fortune');
-      }
+      this.triggerThemedEvent(player, 'fortune');
     }
     // 7. Start / Prison visiting
     else {
@@ -875,6 +869,167 @@ export class GameRoom {
   }
 
   // --- Interactive Casino Minigames (Casino Royale Theme) ---
+  public triggerThemedEvent(player: Player, spaceCategory: 'chance' | 'fortune'): void {
+    const themeId = this.state.themeId || 'world_tour';
+
+    if (themeId === 'casino_royale') {
+      this.triggerCasinoEvent(player, spaceCategory === 'chance' ? 'roulette' : 'slots');
+      return;
+    }
+
+    if (this.casinoEventTimer) {
+      clearTimeout(this.casinoEventTimer);
+      this.casinoEventTimer = null;
+    }
+
+    let eventType: CasinoEventType = 'card_draw';
+    if (spaceCategory === 'fortune') {
+      if (themeId === 'pixel_arcade') eventType = 'loot_chest';
+      else if (themeId === 'cyber_neon') eventType = 'hack_terminal';
+      else if (themeId === 'world_tour') eventType = 'city_lottery';
+      else if (themeId === 'mystic_fantasy') eventType = 'crystal_orb';
+      else if (themeId === 'cosmic_space') eventType = 'artifact_scanner';
+      else if (themeId === 'anime_akiba') eventType = 'gachapon';
+      else if (themeId === 'frutiger_aero') eventType = 'aero_fortune';
+    }
+
+    const rand = Math.random();
+    let outcome: GenericThemedOutcome;
+
+    if (eventType === 'loot_chest') {
+      if (rand < 0.12) {
+        outcome = { title: '💎 LEGENDARY GEM CHEST', description: 'Found a gleaming Legendary Gem! Gained $300 gold!', payout: 300, multiplier: 6, isJackpot: true, itemSymbol: '💎', itemCategory: 'Legendary' };
+      } else if (rand < 0.35) {
+        outcome = { title: '🪙 GOLD COIN CHEST', description: 'Opened a heavy Gold Coin Chest! Gained $150 gold!', payout: 150, multiplier: 3, itemSymbol: '🪙', itemCategory: 'Rare' };
+      } else if (rand < 0.65) {
+        outcome = { title: '🗡️ RARE SWORD CHEST', description: 'Acquired a Rare Pixel Sword! Gained $100 gold!', payout: 100, multiplier: 2, itemSymbol: '🗡️', itemCategory: 'Uncommon' };
+      } else if (rand < 0.85) {
+        outcome = { title: '🧪 HEALTH POTION CHEST', description: 'Found a Pixel Health Potion! Gained $50 gold!', payout: 50, multiplier: 1, itemSymbol: '🧪', itemCategory: 'Common' };
+      } else {
+        outcome = { title: '👾 GOBLIN TRAP CHEST', description: 'A mimic goblin sprang out! Paid $40 gold toll.', payout: -40, multiplier: 0, itemSymbol: '👾', itemCategory: 'Trap' };
+      }
+    } else if (eventType === 'hack_terminal') {
+      if (rand < 0.12) {
+        outcome = { title: '🔓 SYSADMIN ROOT ACCESS', description: 'Bypassed mainframe security! Hack Jackpot of $350 credits!', payout: 350, multiplier: 7, isJackpot: true, itemSymbol: '🔓', detailCode: '0xROOT_350' };
+      } else if (rand < 0.35) {
+        outcome = { title: '💾 ENCRYPTED DATA VAULT', description: 'Decrypted corporate data vault! Gained $200 credits!', payout: 200, multiplier: 4, itemSymbol: '💾', detailCode: '0xVAULT_200' };
+      } else if (rand < 0.65) {
+        outcome = { title: '⚡ OVERCLOCK NODE', description: 'Overclocked quantum node! Gained $100 credits!', payout: 100, multiplier: 2, itemSymbol: '⚡', detailCode: '0xNODE_100' };
+      } else if (rand < 0.85) {
+        outcome = { title: '🛡️ FIREWALL PROTOCOL', description: 'Secured network firewall! Gained $50 credits!', payout: 50, multiplier: 1, itemSymbol: '🛡️', detailCode: '0xFW_050' };
+      } else {
+        outcome = { title: '⚠️ MALWARE INFECTION', description: 'ICE counter-hack payload! System scrub cost $50 credits.', payout: -50, multiplier: 0, itemSymbol: '⚠️', detailCode: '0xERR_050' };
+      }
+    } else if (eventType === 'city_lottery') {
+      if (rand < 0.12) {
+        outcome = { title: '🏛️ GRAND MUNICIPAL JACKPOT', description: 'Landed the Grand City Jackpot! Awarded $400 city grant!', payout: 400, multiplier: 8, isJackpot: true, itemSymbol: '🏛️', detailCode: 'CITY_GRAND_400' };
+      } else if (rand < 0.35) {
+        outcome = { title: '🏙️ SKYLINE DEVELOPMENT GRANT', description: 'Awarded City Skyline Grant! Gained $200!', payout: 200, multiplier: 4, itemSymbol: '🏙️', detailCode: 'GRANT_200' };
+      } else if (rand < 0.65) {
+        outcome = { title: '🚇 TRANSIT EXPANSION BONUS', description: 'Metro Transit dividend payout! Gained $100!', payout: 100, multiplier: 2, itemSymbol: '🚇', detailCode: 'TRANSIT_100' };
+      } else if (rand < 0.85) {
+        outcome = { title: '🎟️ LOTTERY SCRATCH WIN', description: 'Matching city lottery scratch ticket! Won $50!', payout: 50, multiplier: 1, itemSymbol: '🎟️', detailCode: 'LOTTO_050' };
+      } else {
+        outcome = { title: '📑 UTILITY ASSESSMENT FEE', description: 'City infrastructure assessment fee! Paid $40.', payout: -40, multiplier: 0, itemSymbol: '📑', detailCode: 'FEE_040' };
+      }
+    } else if (eventType === 'crystal_orb') {
+      if (rand < 0.12) {
+        outcome = { title: '🔮 ANCIENT ARCHMAGE BLESSING', description: 'The Orb glows celestial gold! Archmage Blessing of $400 gold!', payout: 400, multiplier: 8, isJackpot: true, itemSymbol: '🔮', itemCategory: 'Archmage' };
+      } else if (rand < 0.35) {
+        outcome = { title: '📜 ARCANE GRIMOIRE TREASURE', description: 'Unlocked Arcane Grimoire secrets! Gained $200 gold!', payout: 200, multiplier: 4, itemSymbol: '📜', itemCategory: 'Spellbook' };
+      } else if (rand < 0.65) {
+        outcome = { title: '💎 DRAGON HOARD RUBY', description: 'Extracted Dragon Hoard Gem! Gained $120 gold!', payout: 120, multiplier: 2.5, itemSymbol: '💎', itemCategory: 'Hoard' };
+      } else if (rand < 0.85) {
+        outcome = { title: '🌿 MANA ELIXIR REWARD', description: 'Drank Restoration Elixir! Gained $50 gold!', payout: 50, multiplier: 1, itemSymbol: '🌿', itemCategory: 'Elixir' };
+      } else {
+        outcome = { title: '🧙 WITCH\'S CURSE TOLL', description: 'Tripped a dark wizard trap! Paid $40 gold tribute.', payout: -40, multiplier: 0, itemSymbol: '🧙', itemCategory: 'Curse' };
+      }
+    } else if (eventType === 'artifact_scanner') {
+      if (rand < 0.12) {
+        outcome = { title: '🛸 QUANTUM CORE SYNTHESIS', description: 'Scanner unlocked Quantum Core! Cosmic Jackpot of $450!', payout: 450, multiplier: 9, isJackpot: true, itemSymbol: '🛸', itemCategory: 'Quantum' };
+      } else if (rand < 0.35) {
+        outcome = { title: '🌌 DARK MATTER CACHE', description: 'Discovered Dark Matter Energy Cache! Gained $220!', payout: 220, multiplier: 4.4, itemSymbol: '🌌', itemCategory: 'DarkMatter' };
+      } else if (rand < 0.65) {
+        outcome = { title: '🛰️ PLASMA PULSE REWARD', description: 'Captured plasma pulse surge! Gained $100!', payout: 100, multiplier: 2, itemSymbol: '🛰️', itemCategory: 'Plasma' };
+      } else if (rand < 0.85) {
+        outcome = { title: '☄️ ASTEROID ORE MINING', description: 'Mined rare asteroid minerals! Gained $60!', payout: 60, multiplier: 1.2, itemSymbol: '☄️', itemCategory: 'Ore' };
+      } else {
+        outcome = { title: '☣️ REACTOR BREACH SHIELD', description: 'Reactor containment leak! Emergency repair cost $50.', payout: -50, multiplier: 0, itemSymbol: '☣️', itemCategory: 'Breach' };
+      }
+    } else if (eventType === 'gachapon') {
+      if (rand < 0.12) {
+        outcome = { title: '🎌 ULTRA RARE GOLD FIGURINE', description: 'Gachapon dispensed S-Rank Figurine! Won $400 Yen!', payout: 400, multiplier: 8, isJackpot: true, itemSymbol: '🎌', itemCategory: 'S-Rank' };
+      } else if (rand < 0.35) {
+        outcome = { title: '🎎 LIMITED EDITION ANIME TOY', description: 'Got Limited Edition Anime Collectible! Won $200 Yen!', payout: 200, multiplier: 4, itemSymbol: '🎎', itemCategory: 'A-Rank' };
+      } else if (rand < 0.65) {
+        outcome = { title: '🎮 ARCADE GAME VOUCHER', description: 'Won Arcade Game Token Voucher! Gained $100 Yen!', payout: 100, multiplier: 2, itemSymbol: '🎮', itemCategory: 'B-Rank' };
+      } else if (rand < 0.85) {
+        outcome = { title: '🍬 ANIME CANDY PRIZE', description: 'Capsule dropped Anime Candy Prize! Gained $40 Yen!', payout: 40, multiplier: 1, itemSymbol: '🍬', itemCategory: 'C-Rank' };
+      } else {
+        outcome = { title: '💸 GACHA EMPTY CAPSULE', description: 'Got a duplicate plastic capsule! Spent $30 Yen.', payout: -30, multiplier: 0, itemSymbol: '💸', itemCategory: 'Empty' };
+      }
+    } else if (eventType === 'aero_fortune') {
+      if (rand < 0.12) {
+        outcome = { title: '💧 AQUA CRYSTAL DROP', description: 'Harvested a pure Aqua Crystal! Eco-Digital Jackpot of $350!', payout: 350, multiplier: 7, isJackpot: true, itemSymbol: '💧', itemCategory: 'AquaCrystal' };
+      } else if (rand < 0.35) {
+        outcome = { title: '🌿 ECO INFRASTRUCTURE DIVIDEND', description: 'Received Eco Infrastructure Grant! Gained $200!', payout: 200, multiplier: 4, itemSymbol: '🌿', itemCategory: 'EcoGrant' };
+      } else if (rand < 0.65) {
+        outcome = { title: '☁️ CLOUD DATA SURGE', description: 'Connected to High-Speed Cloud Node! Gained $100!', payout: 100, multiplier: 2, itemSymbol: '☁️', itemCategory: 'CloudData' };
+      } else if (rand < 0.85) {
+        outcome = { title: '🫧 FRESH BUBBLE BONUS', description: 'Captured a refreshing Aqua Bubble! Gained $50!', payout: 50, multiplier: 1, itemSymbol: '🫧', itemCategory: 'Bubble' };
+      } else {
+        outcome = { title: '⚠️ ENVIRONMENTAL TOLL', description: 'Paid eco-system maintenance tariff of $40.', payout: -40, multiplier: 0, itemSymbol: '⚠️', itemCategory: 'Tariff' };
+      }
+    } else {
+      // General Card Draw
+      if (rand < 0.20) {
+        outcome = { title: '🌟 PROSPERITY BLESSING', description: 'Favorable event card! Gained $150 bonus!', payout: 150, multiplier: 3, itemSymbol: '🌟' };
+      } else if (rand < 0.60) {
+        outcome = { title: '📜 THEMED EVENT REWARD', description: 'Event card resolved in your favor! Gained $100!', payout: 100, multiplier: 2, itemSymbol: '📜' };
+      } else if (rand < 0.85) {
+        outcome = { title: '🏷️ MINOR EVENT REWARD', description: 'Small event reward collected! Gained $50!', payout: 50, multiplier: 1, itemSymbol: '🏷️' };
+      } else {
+        outcome = { title: '⚠️ EVENT MAINTENANCE FEE', description: 'Unfavorable event card! Paid $40 fee.', payout: -40, multiplier: 0, itemSymbol: '⚠️' };
+      }
+    }
+
+    this.state.activeCasinoEvent = {
+      id: `theme_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      playerId: player.id,
+      eventType,
+      outcome,
+      status: 'ready',
+      createdAt: Date.now(),
+    };
+
+    this.state.phase = 'action_pending';
+    this.state.turn.pendingAction = null;
+
+    if (player.isBot) {
+      // 1. Short anticipation (400ms) -> trigger spin
+      setTimeout(() => {
+        if (this.state.activeCasinoEvent && this.state.activeCasinoEvent.playerId === player.id) {
+          this.spinCasinoEvent(player.id);
+        }
+      }, 400);
+
+      // 2. Allow full client animation (~4.0s) -> auto-resolve
+      this.casinoEventTimer = setTimeout(() => {
+        if (this.state.activeCasinoEvent && this.state.activeCasinoEvent.playerId === player.id) {
+          this.resolveCasinoEvent(player.id);
+          setTimeout(() => {
+            BotEngine.handleBotTurn(this);
+          }, 600);
+        }
+      }, 4200);
+    } else {
+      // Human safety fallback auto-resolution after 25s
+      this.casinoEventTimer = setTimeout(() => {
+        this.resolveCasinoEvent(player.id);
+      }, 25000);
+    }
+  }
+
   public triggerCasinoEvent(player: Player, eventType: 'roulette' | 'slots'): void {
     if (this.casinoEventTimer) {
       clearTimeout(this.casinoEventTimer);
@@ -1142,7 +1297,7 @@ export class GameRoom {
         } else {
           this.addLog('buy', `🎰 ${player.name} spun the Slots and broke even.`, player.id);
         }
-      } else {
+      } else if (event.eventType === 'roulette') {
         const rOut = outcome as RouletteOutcome;
         if (rOut.isJackpot) {
           this.addLog('buy', `🎡 MEGA JACKPOT! ${player.name} landed on #${rOut.number} (${rOut.color.toUpperCase()}) on Roulette and won $${rOut.payout}!`, player.id);
@@ -1152,6 +1307,18 @@ export class GameRoom {
           this.addLog('rent', `🎡 ${player.name} spun #${rOut.number} (${rOut.color.toUpperCase()}) on Roulette and paid $${Math.abs(rOut.payout)} dealer rake.`, player.id);
         } else {
           this.addLog('buy', `🎡 ${player.name} spun #${rOut.number} (${rOut.color.toUpperCase()}) on Roulette and broke even.`, player.id);
+        }
+      } else {
+        const gOut = outcome as GenericThemedOutcome;
+        const icon = gOut.itemSymbol || '✨';
+        if (gOut.isJackpot) {
+          this.addLog('buy', `${icon} JACKPOT! ${player.name}: ${gOut.title} — won $${gOut.payout}!`, player.id);
+        } else if (gOut.payout > 0) {
+          this.addLog('buy', `${icon} ${player.name}: ${gOut.title} — gained $${gOut.payout}.`, player.id);
+        } else if (gOut.payout < 0) {
+          this.addLog('rent', `${icon} ${player.name}: ${gOut.title} — paid $${Math.abs(gOut.payout)}.`, player.id);
+        } else {
+          this.addLog('buy', `${icon} ${player.name}: ${gOut.title} — resolved cleanly.`, player.id);
         }
       }
 

@@ -355,6 +355,21 @@ export const THEME_NAMES: Record<BoardThemeId, { name: string; icon: string; des
       'Mystery Item 🎁', 'Final Boss Tower', 'Microtransaction Tax', 'The Master Cartridge'
     ],
   },
+  frutiger_aero: {
+    name: 'Frutiger Aero 🌿',
+    icon: '🌿',
+    description: 'Glossy aqua glass, sky blue gradients, fresh green hills, and optimistic eco-digital technology.',
+    tiles: [
+      'AERO GATEWAY / GO', 'Aqua Bay', 'Aero Discovery 💧', 'Cloud Meadow', 'Eco Utility Fee', 'Aero Sky Transit',
+      'Glass Harbor', 'Aero Aqua Fortune 🔮', 'Hydro Stream', 'Eco Plaza', 'Aero Containment',
+      'Crystal Promenade', 'Solar Eco Array', 'Aqua Ridge', 'Glossy Heights', 'Aero Express Line',
+      'Bio Sphere', 'Aero Discovery 💧', 'Eco Garden', 'Skyline Park', 'Cloud Observation Deck',
+      'Hydro Center', 'Aero Aqua Fortune 🔮', 'Glass Atrium', 'Aero Pinnacle', 'Eco Maglev Line',
+      'Sunlit Terrace', 'Clearwater Cove', 'Hydro Power Grid', 'Aqua Horizon', 'Eco Security Hold!',
+      'Aero Tower', 'Cloud Citadel', 'Aero Aqua Fortune 🔮', 'Glossy Arcology', 'Aero Sky Transit Hub',
+      'Aero Discovery 💧', 'Eco Apex Tower', 'Aqua System Tax', 'Frutiger Grand Citadel'
+    ],
+  },
 };
 
 // --- Casino Minigame Constants & Tables ---

@@ -4,12 +4,15 @@ import { PACING_CONFIG } from '../../config/pacing';
 import { useAudio } from '../../context/AudioContext';
 import { useSocket } from '../../context/SocketContext';
 import { AvatarSilhouette } from '../Avatars/AvatarSilhouette';
+import { getTheme } from '../../theme/themeRegistry';
 
 const QUICK_CHAT_EMOJIS = ['😂', '❤️', '🔥', '😭', '👀', '🎉', '👋', '👑', '💸', '🎲'];
 
 export const ChatPanel: React.FC = () => {
   const { gameState, myPlayerId, sendChatMessage } = useSocket();
   const audio = useAudio();
+
+  const theme = getTheme(gameState?.themeId || 'world_tour');
 
   const [inputText, setInputText] = useState('');
   const [lastSentTime, setLastSentTime] = useState(0);
@@ -102,17 +105,32 @@ export const ChatPanel: React.FC = () => {
   ).length;
 
   return (
-    <div className="w-full rounded-2xl bg-slate-900/90 border-2 border-slate-800 shadow-xl flex flex-col h-full overflow-hidden relative min-h-0">
+    <div
+      className="w-full rounded-2xl border-2 shadow-xl flex flex-col h-full overflow-hidden relative min-h-0 backdrop-blur-md transition-all duration-300"
+      style={{
+        backgroundColor: theme.colors.surfacePrimary,
+        borderColor: theme.colors.panelBorder,
+      }}
+    >
       {/* Chat Header */}
-      <div className="px-3 py-2 bg-slate-950/90 border-b border-slate-800 flex items-center justify-between shrink-0">
+      <div
+        className="px-3 py-2 border-b flex items-center justify-between shrink-0"
+        style={{
+          backgroundColor: theme.colors.surfaceMuted,
+          borderColor: theme.colors.panelBorder,
+        }}
+      >
         <div className="flex items-center gap-2">
-          <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
-          <h4 className="text-xs font-black uppercase tracking-wider text-slate-300 font-display">
+          <MessageSquare className="w-3.5 h-3.5" style={{ color: theme.colors.textAccent }} />
+          <h4
+            className="text-xs font-black uppercase tracking-wider font-display"
+            style={{ color: theme.colors.textPrimary }}
+          >
             Match Chat
           </h4>
         </div>
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
+          <div className="flex items-center gap-1.5 text-[10px] font-mono" style={{ color: theme.colors.textSecondary }}>
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>{activePlayersCount} online</span>
           </div>
@@ -123,8 +141,8 @@ export const ChatPanel: React.FC = () => {
             onClick={audio.toggleChatMute}
             className={`p-1 rounded-lg border transition btn-tactile ${
               audio.isChatMuted
-                ? 'bg-slate-800/80 border-slate-700 text-rose-400 hover:text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-cyan-400 hover:text-cyan-300'
+                ? 'bg-rose-500/20 border-rose-400 text-rose-400'
+                : 'bg-sky-500/20 border-sky-400 text-sky-500'
             }`}
             title={audio.isChatMuted ? 'Chat Sounds: MUTED (Click to unmute)' : 'Chat Sounds: ON (Click to mute)'}
           >
@@ -145,9 +163,11 @@ export const ChatPanel: React.FC = () => {
         className="flex-1 overflow-y-auto p-2.5 space-y-2 font-sans text-xs scrollbar-thin min-h-0 relative"
       >
         {chatMessages.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center p-4 text-slate-500 italic">
+          <div className="h-full flex flex-col items-center justify-center text-center p-4 text-slate-400 italic">
             <MessageSquare className="w-7 h-7 opacity-30 mb-1.5" />
-            <span className="text-[10px]">Send a quick greeting or reaction!</span>
+            <span className="text-[10px]" style={{ color: theme.colors.textSecondary }}>
+              Send a quick greeting or reaction!
+            </span>
           </div>
         ) : (
           chatMessages.map((msg) => {
@@ -179,14 +199,18 @@ export const ChatPanel: React.FC = () => {
                 </div>
 
                 <div
-                  className={`max-w-[85%] rounded-xl px-2.5 py-1.5 shadow-sm border transition-all ${
-                    isEliminated
-                      ? isMe
-                        ? 'bg-slate-900/90 border-slate-700/80 text-slate-300'
-                        : 'bg-slate-900/80 border-slate-800 text-slate-300'
+                  className={`max-w-[82%] px-3 py-1.5 rounded-2xl border shadow-sm transition-all ${
+                    theme.id === 'frutiger_aero'
+                      ? isEliminated
+                        ? 'bg-slate-100/90 border-sky-300 text-sky-950'
+                        : isMe
+                        ? 'bg-sky-500/20 border-sky-400/60 text-sky-950'
+                        : 'bg-white/90 border-sky-300/80 text-sky-950'
+                      : isEliminated
+                      ? 'bg-slate-900/90 border-slate-700/80 text-slate-400 opacity-60'
                       : isMe
-                        ? 'bg-gradient-to-br from-purple-900/60 to-slate-900 border-purple-500/40 text-purple-100'
-                        : 'bg-slate-800/80 border-slate-700 text-slate-200'
+                      ? 'bg-sky-900/40 border-sky-500/50 text-slate-100'
+                      : 'bg-slate-900/80 border-slate-700/70 text-slate-200'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-0.5 text-[9.5px]">
@@ -205,11 +229,17 @@ export const ChatPanel: React.FC = () => {
                         </span>
                       )}
                     </div>
-                    <span className="font-mono text-slate-400 text-[8.5px] tabular-nums shrink-0">
+                    <span
+                      className="font-mono text-[8.5px] tabular-nums shrink-0"
+                      style={{ color: theme.colors.textSecondary }}
+                    >
                       {formatTime(msg.timestamp)}
                     </span>
                   </div>
-                  <p className="text-[11px] leading-relaxed break-words font-medium text-slate-200">
+                  <p
+                    className="text-[11px] leading-relaxed break-words font-medium"
+                    style={{ color: theme.colors.textPrimary }}
+                  >
                     {msg.message}
                   </p>
                 </div>
@@ -231,7 +261,13 @@ export const ChatPanel: React.FC = () => {
       )}
 
       {/* Quick Reaction Emojis (Direct Chat Pathway) */}
-      <div className="px-2 py-1 bg-slate-950/80 border-t border-slate-800/80 flex items-center justify-between gap-1 overflow-x-auto shrink-0 scrollbar-none">
+      <div
+        className="px-2 py-1 border-t flex items-center justify-between gap-1 overflow-x-auto shrink-0 scrollbar-none"
+        style={{
+          backgroundColor: theme.colors.surfaceMuted,
+          borderColor: theme.colors.panelBorder,
+        }}
+      >
         {QUICK_CHAT_EMOJIS.map((emoji) => (
           <button
             key={emoji}
@@ -251,7 +287,11 @@ export const ChatPanel: React.FC = () => {
           e.preventDefault();
           handleSendMessage();
         }}
-        className="p-2 bg-slate-950 border-t border-slate-800 flex items-center gap-1.5 shrink-0"
+        className="p-2 border-t flex items-center gap-1.5 shrink-0"
+        style={{
+          backgroundColor: theme.colors.surfaceMuted,
+          borderColor: theme.colors.panelBorder,
+        }}
       >
         <input
           type="text"
@@ -260,12 +300,22 @@ export const ChatPanel: React.FC = () => {
           onKeyDown={handleKeyDown}
           placeholder="Type message..."
           maxLength={PACING_CONFIG.CHAT_MAX_LENGTH}
-          className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition"
+          style={{
+            backgroundColor: theme.colors.surfaceElevated,
+            borderColor: theme.colors.panelBorder,
+            color: theme.colors.textPrimary,
+          }}
+          className="flex-1 border rounded-xl px-2.5 py-1.5 text-xs focus:outline-none transition font-medium placeholder-sky-700/60"
         />
         <button
           type="submit"
           disabled={!inputText.trim()}
-          className="p-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 disabled:opacity-30 text-white transition btn-tactile shadow-sm shrink-0"
+          style={{
+            background: theme.colors.btnPrimaryBg,
+            borderColor: theme.colors.btnPrimaryBorder,
+            color: theme.colors.btnPrimaryText,
+          }}
+          className="p-1.5 rounded-xl border disabled:opacity-30 transition btn-tactile shadow-sm shrink-0 font-bold"
         >
           <Send className="w-3.5 h-3.5" />
         </button>

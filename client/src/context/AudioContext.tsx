@@ -782,7 +782,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const startThemeBgm = (themeId?: string, track: 'gameplay' | 'lobby' | 'auction' = 'gameplay') => {
-    const validThemes = ['pixel_arcade', 'world_tour', 'cyber_neon', 'mystic_fantasy', 'cosmic_space', 'anime_akiba', 'casino_royale'];
+    const validThemes = ['pixel_arcade', 'world_tour', 'cyber_neon', 'mystic_fantasy', 'cosmic_space', 'anime_akiba', 'casino_royale', 'frutiger_aero'];
     if (!themeId || !validThemes.includes(themeId)) {
       stopThemeBgm();
       return;
@@ -823,6 +823,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         bgmBaseName = `/themes/cosmic_space/audio/cosmic-bgm-${track === 'auction' ? 'gameplay' : track}`;
       } else if (themeId === 'anime_akiba') {
         bgmBaseName = `/themes/anime_akiba/audio/anime-akiba-bgm-${track === 'auction' ? 'gameplay' : track}`;
+      } else if (themeId === 'frutiger_aero') {
+        bgmBaseName = `/themes/frutiger_aero/audio/frutiger-bgm-${track === 'auction' ? 'gameplay' : track}`;
       }
 
       if (bgmBaseName) {
@@ -839,6 +841,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             if (!isMuted && currentBgmTrackRef.current === trackKey) {
               bgm.play().catch(() => {});
             }
+          } else {
+            console.info(`🌌 [${themeId} Audio] Dedicated BGM asset ready for drop-in at ${bgmBaseName}.mp3`);
           }
         }, { once: true });
 

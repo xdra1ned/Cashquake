@@ -38,6 +38,8 @@ import { PropertyActionModal } from './components/Modals/PropertyActionModal';
 import { TradingModal } from './components/Modals/TradingModal';
 import { AudioProvider, useAudio } from './context/AudioContext';
 import { SocketProvider, useSocket } from './context/SocketContext';
+import { ThemedPageEnvironment } from './components/Theme/ThemedPageEnvironment';
+import { getTheme } from './theme/themeRegistry';
 
 const GameArena: React.FC = () => {
   const audio = useAudio();
@@ -76,25 +78,49 @@ const GameArena: React.FC = () => {
     return <LobbyScreen />;
   }
 
+  const theme = getTheme(gameState.themeId || 'world_tour');
   const myPlayer = myPlayerId ? gameState.players[myPlayerId] : undefined;
   const isSpectator = !!myPlayer?.isBankrupt || !!myPlayer?.isSpectator;
   const isHost = myPlayer ? myPlayer.isHost : false;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between p-1.5 sm:p-2.5 bg-[#080c16] text-slate-100 overflow-x-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-between p-1.5 sm:p-2.5 text-slate-100 overflow-x-hidden transition-colors duration-500">
+      {/* Layer 1 — Atmospheric Page Environment Overlay */}
+      <ThemedPageEnvironment themeId={gameState.themeId} />
+
       {/* Top Navbar */}
-      <header className="w-full max-w-[1920px] flex items-center justify-between py-1.5 px-2.5 sm:px-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg backdrop-blur-md mb-1.5 shrink-0">
+      <header 
+        className="w-full max-w-[1920px] flex items-center justify-between py-1.5 px-2.5 sm:px-4 rounded-2xl shadow-lg backdrop-blur-md mb-1.5 shrink-0 z-10 border transition-all duration-300"
+        style={{
+          backgroundColor: theme.colors.surfacePrimary,
+          borderColor: theme.colors.panelBorder,
+        }}
+      >
         {/* Left Branding Group: [ CASHQUAKE ] [ ✨ Jasmine ★ ] */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-950/80 border border-slate-800 shadow-inner">
+          <div
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl border shadow-inner transition-all"
+            style={{
+              backgroundColor: theme.colors.surfaceMuted,
+              borderColor: theme.colors.panelBorder,
+            }}
+          >
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-emerald-400" />
-              <h1 className="font-black text-xs sm:text-sm tracking-tight text-white font-display leading-none">
+              <h1
+                className="font-black text-xs sm:text-sm tracking-tight font-display leading-none"
+                style={{ color: theme.colors.textPrimary }}
+              >
                 CASHQUAKE
               </h1>
             </div>
-            <span className="text-[10px] font-mono text-slate-400 border-l border-slate-800 pl-2">
-              <span className="text-amber-400 font-bold tracking-wider">{gameState.roomCode}</span>
+            <span
+              className="text-[10px] font-mono border-l pl-2"
+              style={{ borderColor: theme.colors.panelBorder, color: theme.colors.textSecondary }}
+            >
+              <span className="font-bold tracking-wider" style={{ color: theme.colors.textAccent }}>
+                {gameState.roomCode}
+              </span>
             </span>
           </div>
 
@@ -107,23 +133,33 @@ const GameArena: React.FC = () => {
           {/* How to Play / Guide Button */}
           <button
             onClick={() => setShowHowToPlayModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-bold transition btn-tactile shadow-sm"
+            style={{
+              backgroundColor: theme.colors.btnSecondaryBg,
+              borderColor: theme.colors.btnSecondaryBorder,
+              color: theme.colors.btnSecondaryText,
+            }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition btn-tactile shadow-sm"
             title="How to Play Cashquake (Rules & Guide)"
           >
-            <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
+            <HelpCircle className="w-3.5 h-3.5" style={{ color: theme.colors.textAccent }} />
             <span className="hidden sm:inline font-sans">Guide</span>
           </button>
 
           {/* Host Controls / Match Rules Button */}
           <button
             onClick={() => setShowHostDrawer(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-bold transition btn-tactile shadow-sm"
+            style={{
+              backgroundColor: theme.colors.btnSecondaryBg,
+              borderColor: theme.colors.btnSecondaryBorder,
+              color: theme.colors.btnSecondaryText,
+            }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition btn-tactile shadow-sm"
             title="Open Game Settings & Host Controls"
           >
             {isHost ? (
               <Crown className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
             ) : (
-              <Sliders className="w-3.5 h-3.5 text-cyan-400" />
+              <Sliders className="w-3.5 h-3.5" style={{ color: theme.colors.textAccent }} />
             )}
             <span className="hidden sm:inline font-sans">{isHost ? 'Host Controls' : 'Match Rules'}</span>
           </button>
@@ -133,7 +169,7 @@ const GameArena: React.FC = () => {
             onClick={() => setShowVaultModal(true)}
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold transition btn-tactile shadow-sm font-mono"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span className="hidden md:inline font-sans">Vault</span>
             <span className="text-[11px] tabular-nums font-bold">🪙{session.quakeCoins}</span>
           </button>
@@ -141,20 +177,30 @@ const GameArena: React.FC = () => {
           {/* Sound Toggle */}
           <button
             onClick={audio.toggleMute}
-            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition btn-tactile"
+            style={{
+              backgroundColor: theme.colors.btnSecondaryBg,
+              borderColor: theme.colors.btnSecondaryBorder,
+              color: theme.colors.btnSecondaryText,
+            }}
+            className="p-1.5 sm:p-2 rounded-xl border transition btn-tactile"
             title={audio.isMuted ? 'Unmute' : 'Mute'}
           >
             {audio.isMuted ? (
               <VolumeX className="w-4 h-4 text-rose-400" />
             ) : (
-              <Volume2 className="w-4 h-4 text-cyan-400" />
+              <Volume2 className="w-4 h-4" style={{ color: theme.colors.textAccent }} />
             )}
           </button>
 
           {/* Leave Game */}
           <button
             onClick={leaveRoom}
-            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition btn-tactile"
+            style={{
+              backgroundColor: theme.colors.btnSecondaryBg,
+              borderColor: theme.colors.btnSecondaryBorder,
+              color: theme.colors.btnSecondaryText,
+            }}
+            className="p-1.5 sm:p-2 rounded-xl border transition btn-tactile"
             title="Leave Match"
           >
             <LogOut className="w-4 h-4" />
@@ -230,7 +276,13 @@ const GameArena: React.FC = () => {
         {/* Left Column: Player Standings Roster & Live In-Game Auction Panel */}
         {!isLeftPanelCollapsed ? (
           <div className="hidden lg:flex w-72 xl:w-80 2xl:w-84 shrink-0 flex-col gap-2.5 transition-all">
-            <div className="p-3.5 rounded-3xl bg-slate-900/85 border border-slate-800 shadow-xl backdrop-blur-sm">
+            <div
+              className="p-3.5 rounded-3xl border shadow-xl backdrop-blur-md transition-all duration-300"
+              style={{
+                backgroundColor: theme.colors.surfacePrimary,
+                borderColor: theme.colors.panelBorder,
+              }}
+            >
               <div className="flex items-center justify-between mb-2.5">
                 <div className="flex items-center gap-2">
                   <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 font-display">

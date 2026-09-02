@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { calculateNetWorth } from '@shared/gameLogic';
 import { useSocket } from '../../context/SocketContext';
 import { AvatarSilhouette } from '../Avatars/AvatarSilhouette';
+import { getTheme } from '../../theme/themeRegistry';
 
 interface PlayerHUDProps {
   layout?: 'horizontal' | 'vertical';
@@ -67,6 +68,7 @@ export const PlayerHUD: React.FC<PlayerHUDProps> = ({ layout = 'horizontal' }) =
 
   if (!gameState) return null;
 
+  const theme = getTheme(gameState.themeId || 'world_tour');
   const players = gameState.playerOrder.map((id) => gameState.players[id]).filter(Boolean);
   const isVertical = layout === 'vertical';
 
@@ -105,18 +107,22 @@ export const PlayerHUD: React.FC<PlayerHUDProps> = ({ layout = 'horizontal' }) =
             key={player.id}
             onMouseEnter={() => setInspectedPlayerId(player.id)}
             onMouseLeave={() => setInspectedPlayerId(null)}
+            style={{
+              backgroundColor: isCurrentTurn ? theme.colors.surfaceElevated : theme.colors.surfacePrimary,
+              borderColor: isCurrentTurn ? theme.colors.turnGlow : theme.colors.panelBorder,
+            }}
             className={`p-2.5 sm:p-3 rounded-xl border transition-all duration-200 flex items-center gap-3 cursor-pointer ${
               isVertical ? 'w-full' : 'shrink-0 min-w-[160px] sm:min-w-[185px]'
             } ${
               player.isBankrupt
-                ? 'bg-slate-950/60 border-slate-850 opacity-40'
+                ? 'opacity-40'
                 : isInspected
-                ? 'bg-slate-800 border-white shadow-xl ring-2 ring-white scale-[1.02] z-10 opacity-100'
+                ? 'shadow-xl ring-2 ring-white scale-[1.02] z-10 opacity-100'
                 : isDimmed
-                ? 'bg-slate-900/60 border-slate-800/60 opacity-40 filter saturate-75'
+                ? 'opacity-40 filter saturate-75'
                 : isCurrentTurn
-                ? 'bg-slate-900 border-amber-400/90 shadow-md shadow-amber-500/10 ring-1 ring-amber-400/60 opacity-100'
-                : 'bg-slate-900/80 border-slate-800 hover:border-slate-700 opacity-100'
+                ? 'shadow-md ring-1 opacity-100'
+                : 'hover:opacity-100'
             }`}
           >
             {/* Silhouette Avatar Container */}
@@ -175,7 +181,10 @@ export const PlayerHUD: React.FC<PlayerHUDProps> = ({ layout = 'horizontal' }) =
             <div className="flex-1 min-w-0">
               {/* Header row: Player Name (truncate) and Anchored Badges (+$/-$ & YOU & ALLIED) */}
               <div className="flex items-center justify-between gap-1.5 min-w-0">
-                <span className="font-bold text-white text-xs truncate font-display min-w-0 flex-1">
+                <span
+                  className="font-bold text-xs truncate font-display min-w-0 flex-1"
+                  style={{ color: theme.colors.textPrimary }}
+                >
                   {player.name}
                 </span>
                 <div className="flex items-center gap-1 shrink-0">
@@ -203,7 +212,14 @@ export const PlayerHUD: React.FC<PlayerHUDProps> = ({ layout = 'horizontal' }) =
                     </span>
                   )}
                   {isMe && (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-lg bg-pink-500/20 text-pink-300 font-bold border border-pink-500/30 shrink-0">
+                    <span
+                      className="text-[9px] px-1.5 py-0.2 rounded-lg font-bold border shrink-0"
+                      style={{
+                        backgroundColor: theme.colors.badgeBg,
+                        borderColor: theme.colors.badgeBorder,
+                        color: theme.colors.badgeText,
+                      }}
+                    >
                       YOU
                     </span>
                   )}
@@ -220,7 +236,10 @@ export const PlayerHUD: React.FC<PlayerHUDProps> = ({ layout = 'horizontal' }) =
                   ⚠️ Reconnect {formatGraceTime(player.reconnectDeadline)}
                 </div>
               ) : (
-                <div className="text-[10px] text-slate-400 font-mono truncate leading-none mt-0.5">
+                <div
+                  className="text-[10px] font-mono truncate leading-none mt-0.5"
+                  style={{ color: theme.colors.textSecondary }}
+                >
                   {player.customization.title || 'Landlord'}
                 </div>
               )}
@@ -228,14 +247,20 @@ export const PlayerHUD: React.FC<PlayerHUDProps> = ({ layout = 'horizontal' }) =
               {/* Cash in JetBrains Mono or Bankrupt Summary */}
               {!player.isBankrupt ? (
                 <>
-                  <div className="font-mono font-black text-xs sm:text-sm text-emerald-400 tabular-nums mt-0.5">
+                  <div
+                    className="font-mono font-black text-xs sm:text-sm tabular-nums mt-0.5"
+                    style={{ color: theme.colors.textPrimary }}
+                  >
                     ${player.cash}
                   </div>
 
                   {/* Properties count & Net worth */}
-                  <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1.5 leading-none mt-0.5">
+                  <div
+                    className="text-[10px] font-mono flex items-center gap-1.5 leading-none mt-0.5"
+                    style={{ color: theme.colors.textSecondary }}
+                  >
                     <span className="flex items-center gap-0.5">
-                      <Building2 className="w-2.5 h-2.5 text-cyan-400 inline" />
+                      <Building2 className="w-2.5 h-2.5 text-cyan-500 inline" />
                       {player.inventory.properties.length}
                     </span>
                     <span>•</span>

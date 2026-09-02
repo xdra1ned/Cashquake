@@ -5,35 +5,26 @@ import { CyberNeonInteractions } from './CyberNeonInteractions';
 import { MysticFantasyInteractions } from './MysticFantasyInteractions';
 import { CosmicSpaceInteractions } from './CosmicSpaceInteractions';
 import { AnimeAkibaInteractions } from './AnimeAkibaInteractions';
+import { FrutigerAeroInteractions } from './FrutigerAeroInteractions';
 
 interface ThemeInteractiveLayerProps {
   themeId: BoardThemeId;
 }
 
+/**
+ * Center Arena Ambient Decorative Layer.
+ * Positioned as an absolute background overlay (z-0) so it never impacts
+ * the vertical flex positioning of the central gameplay HUD across all 8 themes.
+ */
 export const ThemeInteractiveLayer: React.FC<ThemeInteractiveLayerProps> = ({ themeId }) => {
-  if (themeId === 'world_tour') {
-    return (
-      <div className="w-full flex justify-center py-1 z-15">
-        <WorldMetropolisInteractions />
-      </div>
-    );
-  }
-
-  if (themeId === 'cyber_neon') {
-    return <CyberNeonInteractions />;
-  }
-
-  if (themeId === 'mystic_fantasy') {
-    return <MysticFantasyInteractions />;
-  }
-
-  if (themeId === 'cosmic_space') {
-    return <CosmicSpaceInteractions />;
-  }
-
-  if (themeId === 'anime_akiba') {
-    return <AnimeAkibaInteractions />;
-  }
-
-  return null;
+  return (
+    <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
+      {themeId === 'world_tour' && <WorldMetropolisInteractions />}
+      {themeId === 'cyber_neon' && <CyberNeonInteractions />}
+      {themeId === 'mystic_fantasy' && <MysticFantasyInteractions />}
+      {themeId === 'cosmic_space' && <CosmicSpaceInteractions />}
+      {themeId === 'anime_akiba' && <AnimeAkibaInteractions />}
+      {themeId === 'frutiger_aero' && <FrutigerAeroInteractions />}
+    </div>
+  );
 };

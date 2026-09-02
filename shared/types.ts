@@ -130,9 +130,20 @@ export type BoardThemeId =
   | 'cosmic_space'
   | 'anime_akiba'
   | 'casino_royale'
-  | 'pixel_arcade';
+  | 'pixel_arcade'
+  | 'frutiger_aero';
 
-export type CasinoEventType = 'roulette' | 'slots';
+export type CasinoEventType =
+  | 'roulette'
+  | 'slots'
+  | 'loot_chest'
+  | 'hack_terminal'
+  | 'city_lottery'
+  | 'crystal_orb'
+  | 'artifact_scanner'
+  | 'gachapon'
+  | 'aero_fortune'
+  | 'card_draw';
 
 export interface RouletteOutcome {
   number: number; // 0 to 36
@@ -154,11 +165,22 @@ export interface SlotsOutcome {
   isJackpot?: boolean;
 }
 
+export interface GenericThemedOutcome {
+  title: string;
+  description: string;
+  payout: number;
+  multiplier?: number;
+  isJackpot?: boolean;
+  itemSymbol?: string;
+  itemCategory?: string;
+  detailCode?: string;
+}
+
 export interface ActiveCasinoEvent {
   id: string;
   playerId: PlayerId;
   eventType: CasinoEventType;
-  outcome: RouletteOutcome | SlotsOutcome;
+  outcome: RouletteOutcome | SlotsOutcome | GenericThemedOutcome;
   status: 'ready' | 'spinning' | 'resolved';
   createdAt: number;
 }

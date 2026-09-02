@@ -3,6 +3,7 @@ import { Sparkles, Users } from 'lucide-react';
 import { useSocket } from '../../context/SocketContext';
 import { RouletteWheelView } from './RouletteWheelView';
 import { SlotMachineView } from './SlotMachineView';
+import { ThemedFortuneModal } from '../Modals/ThemedFortuneModal';
 
 export const CasinoEventModal: React.FC = () => {
   const { gameState, myPlayerId, spinCasinoEvent, resolveCasinoEvent } = useSocket();
@@ -65,13 +66,15 @@ export const CasinoEventModal: React.FC = () => {
               onSpin={spinCasinoEvent}
               onResolve={resolveCasinoEvent}
             />
-          ) : (
+          ) : event.eventType === 'slots' ? (
             <SlotMachineView
               event={event}
               isMyEvent={isMyEvent}
               onSpin={spinCasinoEvent}
               onResolve={resolveCasinoEvent}
             />
+          ) : (
+            <ThemedFortuneModal event={event} themeId={gameState.themeId} />
           )}
         </div>
       </div>

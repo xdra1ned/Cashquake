@@ -1,79 +1,112 @@
-# Cashquake 🌋💰 — Real-Time Multiplayer Board Game
+# Cashquake 🌋💰
 
-**Cashquake** is a free, browser-based, real-time multiplayer property trading and economy board game (inspired by Monopoly, Business, and RichUp.io).
-
-Created with love and mild chaos by **Jasmine** ⭐.
+A multiplayer browser board game for rolling dice, buying questionable properties, making trades, and generally causing problems for your friends.
 
 ---
 
-## 🌟 Key Features
+## What is Cashquake?
 
-1. **100% Free & Zero Paywalls**:
-   - Every single board map, game mode, rule setting, avatar, dice skin, and cosmetic is available without spending real money.
-   - **QuakeVault In-Game Shop**: Unlock cosmetics and titles using *QuakeCoins* earned from playing matches, rolling doubles, collecting rent, and winning games!
+Cashquake is an independent property-trading board game you can play straight from your browser. 
 
-2. **Instant Frictionless Play**:
-   - **No Mandatory Login/Signup**: Friends receive a 5-letter room code (e.g. `CQ88X`) or direct link and start rolling immediately as guests.
-   - **Reconnection Support**: If you refresh or drop connection, you seamlessly re-join with your money, properties, and position intact.
-   - **Spectator Mode**: Watch games in real-time without taking a player slot.
-
-3. **2D Top-Down Board with 5 Unique Themes**:
-   - 🌍 **World Metropolis**: Tokyo, Paris, Cairo, New York, Rio, Sydney, London, and Rome.
-   - ⚡ **Cyber Neon 2099**: Megacorps, Data Centers, Neural Nodes, and Cyber Prisons.
-   - 🔮 **Mystic Fantasy Realm**: Dragon's Lair, Elven Spires, Goblin Mines, and Astral Observatories.
-   - 🚀 **Cosmic Space Colony**: Lunar Base, Mars Outposts, Asteroid Mines, and Warp Gates.
-   - 🌸 **Anime Akiba District**: Manga Cafes, Ramen Alley, Idol Stages, and Mecha Hangars.
-
-4. **Deep Game Rules & Chaos Engine**:
-   - **Categorized Rule Customizer**: Configure Economy (Starting Cash, GO rewards, rent multipliers, vacation cash pots), Properties (auctions, mortgage interest, even building), Movement, and Detention.
-   - **Presets**: *Classic Tycoon, Speed Quake (15-min blitz), High Roller Strategy, Total Chaos, Anarchy Mode, and Custom*.
-   - **Chaos Modifiers**: *Rent Roulette (3x rent surprise), Market Crash (-40% prices), Blood Money (rent redistribution to the poorest), Robin Hood, Bank Glitch, and Tax Surges*.
-
-5. **Multiplayer & Smart AI Bots**:
-   - Up to 8 players per room!
-   - Built-in AI Bots (*Chaotic Carl, Safe Sally, Greedy Goblin, Tycoon Jasmine*) for instant solo practice or filling empty slots.
-
-6. **Interactive Modals & Real-Time Trading**:
-   - **Multi-Asset Trading Floor**: Propose trades with multiple properties, cash amounts, and Get-Out-of-Jail cards.
-   - **Live Property Auctions**: Real-time bidding war with live countdown ticker and anti-sniping extensions.
-   - **Property Portfolio Manager**: Construct houses/hotels, mortgage, and unmortgage with full rule enforcement.
-   - **Web Audio Sound Effects**: Crispy synthesized dice rattling, cash register *cha-ching*, jail door slams, and victory fanfares.
-
-7. **End-of-Game Ceremony & Friendship Destruction Stats**:
-   - 🥇 🥈 🥉 Animated victory podium with celebratory confetti.
-   - Match analytics: *The Ruthless Slumlord, The Money Pit, Frequent Convict, Master Diplomat, and Friendship Hazard Level*.
-
-8. **Jasmine's Creator Easter Egg 💖**:
-   - Interactive creator badge in the menu and footer.
-   - Rare Fortune Card: *"Jasmine’s Blessing (+ $150 & +50 QuakeCoins)"*!
+You spin up a room, share a 5-letter code with friends, roll dice, buy up tiles, construct properties, haggle over trades, fight through auctions, and try to keep your bank balance above zero. No downloads, no signups, and no microtransactions—just open a link and start rolling.
 
 ---
 
-## 🚀 Quick Start & Installation
+## What's different about it?
 
-To run Cashquake locally:
+I didn't try to reinvent how property board games work, but I wanted to make one that felt much less static and a lot more atmospheric to play online.
+
+Instead of playing on the same plain board every time, Cashquake transforms into different visual and acoustic worlds with custom styling, background music, and sound design. 
+
+Here is what gives matches their personality:
+
+* **Eight Distinct Worlds:** Play across environments ranging from a neon-drenched cyberpunk city to a glossy 2000s Frutiger Aero landscape, a dark fantasy realm, or a retro 8-bit arcade.
+* **Wild Rule Modifiers:** Turn on optional event shifts like market price crashes, rent roulette surprises, or tax redistributions that shake up the leaderboard when someone gets too comfortable.
+* **Custom Game Rules:** Adjust starting money, GO pass rewards, auction timers, and mortgage penalties, or drop in quick presets for 15-minute speed matches or high-stakes strategy games.
+* **Live Auctions & Multi-Item Trading:** Put unbought properties up for real-time bidding wars, or construct complex trade deals offering properties, cash, and jail passes.
+* **AI Bot Personalities:** Fill open slots or play solo against distinct bot personalities like *Chaotic Carl*, *Safe Sally*, *Greedy Goblin*, and *Tycoon Jasmine*.
+
+---
+
+## The Eight Worlds
+
+Each theme gives the game board, UI, and audio a completely different mood:
+
+* 🌍 **World Metropolis** — Financial skyscrapers at dusk with urban architectural tones and city chimes.
+* ⚡ **Cyber Neon 2099** — Dark cyberpunk grid with circuit lines, corporate megacorps, and terminal overlays.
+* 🔮 **Mystic Fantasy Realm** — Arcane runes, dragon lairs, goblin mines, and crystal sound effects.
+* 🚀 **Cosmic Space Expanse** — Deep space nebula, orbital outposts, constellation maps, and satellite comms.
+* 🌸 **Anime Akiba District** — Akihabara neon, gachapon machines, idol billboards, and train platform audio.
+* 🎰 **Casino Royale** — Deep green velvet felt, gold-rimmed roulette wheels, slot reels, and jackpot fanfares.
+* 🕹️ **Pixel Quest 8-Bit** — Retro CRT arcade screen framing, pixel graphics, and chiptune soundscapes.
+* 🌿 **Frutiger Aero** — Glossy aqua glass, optimistic eco-tech hills, water drops, and 2000s skeuomorphic details.
+
+---
+
+## A Note on Inspiration & Originality
+
+Cashquake is a personal project created for fun, learning, and playing matches with friends.
+
+It is heavily inspired by classic property-trading board games (such as *Monopoly* and *Business*) as well as modern browser implementations like *RichUp.io*. I make no claim to have invented the underlying board-game mechanics, dice movement rules, tile layouts, or property trading concepts. 
+
+Cashquake is simply my own visual, audio, and code implementation of that familiar style of game. It is an independent personal project and is not affiliated with, sponsored by, authorized by, or endorsed by Hasbro, Inc., Monopoly, or any official rights holders.
+
+---
+
+## Why I Built It
+
+I wanted a fast, lightweight way to play this style of board game with friends in a browser window without dealing with heavy downloads or account setups—while giving the board itself a lot more color, music, and energy. It also gave me an excuse to mess around with real-time multiplayer, custom themes, and way too many different board-game sound effects.
+
+---
+
+## How It Works & Local Setup
+
+The project uses a Node.js and Express backend with Socket.IO to keep player turns, rolls, auctions, and game state synchronized in real time across clients, paired with a React and TypeScript frontend built using Vite.
+
+### Prerequisites
+* **Node.js** (v18 or higher recommended)
+* **npm** (v9 or higher)
+
+### Running Locally
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/Cashquake.git
+   cd Cashquake
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start local development:**
+   ```bash
+   npm run dev
+   ```
+   This launches:
+   * Backend server on `http://localhost:4000`
+   * Vite frontend client on `http://localhost:5173`
+
+4. **Play in browser:**
+   Open `http://localhost:5173` in your browser.
+
+### Testing the Single-Service Production Server
+
+Cashquake is structured so a single Node server can serve both the API, WebSockets, and built frontend static assets:
 
 ```bash
-# 1. Install dependencies in root, server, and client
-npm install
-cd server && npm install
-cd ../client && npm install
-cd ..
+# Build the client and type-check the server
+npm run build
 
-# 2. Start both server and client concurrently
-npm run dev
+# Start the server in production mode
+npm start
 ```
-
-Open your browser to:
-**`http://localhost:5173`**
-
-To play with friends on the same local network:
-Share your local IP address: `http://<YOUR_LOCAL_IP>:5173/?code=YOUR_ROOM_CODE`
+The server will run on `http://localhost:4000` (or `process.env.PORT`).
 
 ---
 
-## 🛠️ Tech Stack
+## Built With
 
-- **Frontend**: React 18, TypeScript, Vite, Tailwind CSS, Lucide Icons, Canvas Confetti, Web Audio API.
-- **Backend**: Node.js, Express, Socket.IO, TypeScript, UUID.
-- **Shared Logic**: Deterministic game engine rules and type definitions shared across client and server.
+* **Frontend:** React, TypeScript, Vite, Tailwind CSS, Web Audio API
+* **Backend:** Node.js, Express, Socket.IO

@@ -15,7 +15,8 @@ export type CenterPatternId =
   | 'blossom'             // Anime Akiba — petal geometry
   | 'akiba_district'      // Anime Akiba — dense anime streetscape, elevated Yamanote rail & neon storefronts
   | 'roulette'            // Casino Royale — illuminated roulette wheel & card filigree
-  | 'arcade_screen';      // Pixel Quest — retro arcade screen, pixel starfield & coin banner
+  | 'arcade_screen'       // Pixel Quest — retro arcade screen, pixel starfield & coin banner
+  | 'aero_eco';           // Frutiger Aero — concentric aqua glass rings, eco droplet & cloud motif
 
 export interface ThemeColorPalette {
   /** Board outer background (behind tiles) */
@@ -42,6 +43,48 @@ export interface ThemeColorPalette {
   specialBg: string;
   /** Turn indicator glow color */
   turnGlow: string;
+
+  // --- Phase 2 Full-Page Semantic Design Tokens ---
+  /** Application page background CSS gradient or solid color */
+  pageBgGradient: string;
+  /** Primary UI panel surface (Standings, Chat, Activity Log, HUD) */
+  surfacePrimary: string;
+  /** Elevated UI surface (Cards, Modals, Dropdowns) */
+  surfaceElevated: string;
+  /** Muted UI sub-surface / section header */
+  surfaceMuted: string;
+  /** Panel border CSS color */
+  panelBorder: string;
+  /** Primary text color (high-contrast body text) */
+  textPrimary: string;
+  /** Secondary text color (metadata, timestamps) */
+  textSecondary: string;
+  /** Text accent highlight color */
+  textAccent: string;
+  /** Primary action button background */
+  btnPrimaryBg: string;
+  /** Primary action button hover state background */
+  btnPrimaryHover: string;
+  /** Primary action button text color */
+  btnPrimaryText: string;
+  /** Primary action button border color */
+  btnPrimaryBorder: string;
+  /** Secondary button background */
+  btnSecondaryBg: string;
+  /** Secondary button hover background */
+  btnSecondaryHover: string;
+  /** Secondary button text color */
+  btnSecondaryText: string;
+  /** Secondary button border color */
+  btnSecondaryBorder: string;
+  /** Status badge background */
+  badgeBg: string;
+  /** Status badge border */
+  badgeBorder: string;
+  /** Status badge text color */
+  badgeText: string;
+  /** Visual atmosphere type for Layer 1 Page Environment */
+  atmosphericId: 'stars_nebula' | 'cyber_grid' | 'velvet_lounge' | 'arcade_crt' | 'city_skyline' | 'mystic_runes' | 'neon_akiba' | 'aero_eco';
 }
 
 /**
